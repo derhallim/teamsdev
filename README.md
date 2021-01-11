@@ -1,2 +1,0 @@
-# teamsdev
-TeamsDev
