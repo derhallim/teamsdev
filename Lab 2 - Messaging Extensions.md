@@ -254,45 +254,34 @@ and send information back to Teams.
 
 4.  Open **planetBot.ts** file and paste the following code in it
 
-    import {
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+import {
+TeamsActivityHandler,
+TurnContext,
+MessageFactory
+} from "botbuilder";
+import * as Util from "util";
+const TextEncoder = Util.TextEncoder;
+import * as debug from "debug";
+const log = debug("msteams");
+export class PlanetBot extends TeamsActivityHandler {
+constructor() {
+super();
+}
+}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    TeamsActivityHandler,
+1.  Save the **planetBot.ts** file and close it.
 
-    TurnContext,
-
-    MessageFactory
-
-    } from "botbuilder";
-
-    import \* as Util from "util";
-
-    const TextEncoder = Util.TextEncoder;
-
-    import \* as debug from "debug";
-
-    const log = debug("msteams");
-
-    export class PlanetBot extends TeamsActivityHandler {
-
-    constructor() {
-
-    super();
-
-    }
-
-    }
-
-5.  Save the **planetBot.ts** file and close it.
-
-6.  After creating the bot, the next step is to expose it as part of the app's
+2.  After creating the bot, the next step is to expose it as part of the app's
     REST API. Go to the folder
     **C:\\Teams_Projects\\learn-msteams-bots\\src\\app**.
 
-7.  Open the file **TeamsAppsComponents.ts**. This file is used in the core web
+3.  Open the file **TeamsAppsComponents.ts**. This file is used in the core web
     server file. This file needs to be updated to expose the bot to the app's
     API and to configure a bot adapter for the app.
 
-8.  Add the following code at the end of the existing code in this file:
+4.  Add the following code at the end of the existing code in this file:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 export * from "./planetBot/planetBot";
