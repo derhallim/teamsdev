@@ -1,6 +1,6 @@
 **Lab 5 – Task Modules**
 
-## **Exercise 1 - Collecting user input with task modules**
+## Exercise 1 - Collecting user input with task modules
 
 In this exercise, you'll learn the basics of task modules in Microsoft Teams and
 how to collect input from users in a custom Teams tab. After creating a new
@@ -17,7 +17,7 @@ enables the user to specify the ID of the YouTube video to display. Once
 changed, when the user saves their changes, it will use the callback to close
 submit the new ID back to the tab.
 
-### **Task 1 - Create Microsoft Teams app**
+### Task 1 - Create Microsoft Teams app
 
 1.  Open **Command Prompt** and change the directory to C:\\Teams_Projects.
 
@@ -77,7 +77,7 @@ After answering the generator's questions, the generator will create the
 scaffolding for the project and then automatically execute npm install that
 downloads all the dependencies required by the project.
 
-### **Task 2 - Test the personal tab**
+### Task 2 - Test the personal tab
 
 1.  On **Command Prompt**, ensure that you are in
     **C:\\Teams_Projects\\learn-msteams-taskmodules** directory and run the
@@ -144,7 +144,7 @@ subdomain.
     ![](media/9c1e7868cd8deaef419a1e8a9e3960d3.png)
 
 9.  Here you can see some **TODO** items to address. You'll update the todo
-    items later in the exercise*.*
+    items later in the exercise\*.\*
 
     ![](media/01b5ba71d32ef6fc17666ecf1e367a3e.png)
 
@@ -162,7 +162,7 @@ Microsoft Teams client using the Microsoft Teams JavaScript SDK.
 1.  On your **Command Prompt**, stop the running process by pressing Ctrl+C and
     then enter **Y** and press enter key.
 
-### **Task 3 - Implement the personal tab's user interface**
+### Task 3 - Implement the personal tab's user interface
 
 1.  Open the file
     **C:\\Teams_Projects\\learn-msteams-taskmodules\\src\\app\\scripts\\youTubePlayer1Tab\\youTubePlayer1Tab.tsx**.
@@ -171,164 +171,126 @@ Microsoft Teams client using the Microsoft Teams JavaScript SDK.
     UI - React library. Find the following import statement at the top of the
     file that imports components from the Fluent UI - React library:
 
-    import { Provider, Flex, Text, Button, Header } from
-    "@fluentui/react-northstar";
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+import { Provider, Flex, Text, Button, Header } from "@fluentui/react-northstar";
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-3.  Replace the previous statement with the following import statement:
+1.  Replace the previous statement with the following import statement:
 
-    import {
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+import {
+Provider,
+Flex,
+Text,
+Button,
+Header,
+ThemePrepared,
+teamsTheme,
+teamsDarkTheme,
+teamsHighContrastTheme,
+Input
+} from "@fluentui/react-northstar";
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    Provider,
-
-    Flex,
-
-    Text,
-
-    Button,
-
-    Header,
-
-    ThemePrepared,
-
-    teamsTheme,
-
-    teamsDarkTheme,
-
-    teamsHighContrastTheme,
-
-    Input
-
-    } from "@fluentui/react-northstar";
-
-4.  Update the state of the component to contain a list of items and a property
+1.  Update the state of the component to contain a list of items and a property
     for a new item. Locate the IYouTubePlayer1TabState interface in the
     YouTubePlayer1Tab.tsx file and add the following properties to it:
 
-    teamsTheme: ThemePrepared;
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+teamsTheme: ThemePrepared;
+youTubeVideoId?: string;
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    youTubeVideoId?: string;
-
-5.  Add the following method to the YouTubePlayer1Tab class that updates the
+1.  Add the following method to the YouTubePlayer1Tab class that updates the
     component state to the theme that matches the currently selected Microsoft
     Teams client theme:
 
-    private updateComponentTheme = (currentThemeName: string = "default"): void
-    =\> {
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+private updateComponentTheme = (currentThemeName: string = "default"): void => {
+let theme: ThemePrepared;
+switch (currentThemeName) {
+case "default":
+theme = teamsTheme;
+break;
+case "dark":
+theme = teamsDarkTheme;
+break;
+case "contrast":
+theme = teamsHighContrastTheme;
+break;
+default:
+theme = teamsTheme;
+break;
+}
+// update the state
+this.setState(Object.assign({}, this.state, {
+teamsTheme: theme
+}));
+}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    let theme: ThemePrepared;
-
-    switch (currentThemeName) {
-
-    case "default":
-
-    theme = teamsTheme;
-
-    break;
-
-    case "dark":
-
-    theme = teamsDarkTheme;
-
-    break;
-
-    case "contrast":
-
-    theme = teamsHighContrastTheme;
-
-    break;
-
-    default:
-
-    theme = teamsTheme;
-
-    break;
-
-    }
-
-    // update the state
-
-    this.setState(Object.assign({}, this.state, {
-
-    teamsTheme: theme
-
-    }));
-
-    }
-
-6.  Initialize the current theme and state of the component. Locate the line
+1.  Initialize the current theme and state of the component. Locate the line
     **this.updateTheme(this.getQueryVariable("theme"));** and replace it with
     the following code in the **componentWillMount()** method:
 
-    this.updateComponentTheme(this.getQueryVariable("theme"));
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+this.updateComponentTheme(this.getQueryVariable("theme"));
+this.setState(Object.assign({}, this.state, {
+youTubeVideoId: "VlEH4vtaxp4"
+}));
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    this.setState(Object.assign({}, this.state, {
+1.  Within the **componentWillMount()** method, locate the following line:
 
-    youTubeVideoId: "VlEH4vtaxp4"
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+microsoftTeams.registerOnThemeChangeHandler(this.updateTheme);
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    }));
-
-7.  Within the **componentWillMount()** method, locate the following line:
-
-    microsoftTeams.registerOnThemeChangeHandler(this.updateTheme);
-
-8.  This code registers an event handler to update the component's theme to
+1.  This code registers an event handler to update the component's theme to
     match the theme of the current Microsoft Teams client when this page is
     loaded as a tab. Update this line to call the new handler in the following
     line to register another handler to update the component theme:
 
-    microsoftTeams.registerOnThemeChangeHandler(this.updateComponentTheme);
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+microsoftTeams.registerOnThemeChangeHandler(this.updateComponentTheme);
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-9.  Locate the **render()** method and update it to the following code. The
+1.  Locate the **render()** method and update it to the following code. The
     **render()** method will now display the list of items in our state out with
     a brief copyright statement:
 
-    public render() {
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+public render() {
+return (
+<Provider theme={this.state.teamsTheme}>
+<Flex column gap="gap.smaller">
+<Header>Task Module Demo</Header>
+<Text>YouTube Video ID:</Text>
+<Input value={this.state.youTubeVideoId} disabled></Input>
+<Button content="Change Video ID" onClick={this.onChangeVideo}></Button>
+<Button content="Show Video" primary onClick={this.onShowVideo}></Button>
+<Text content="(C) Copyright Contoso" size="smallest"></Text>
+</Flex>
+</Provider>
+);
+}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    return (
-
-    \<Provider theme={this.state.teamsTheme}\>
-
-    \<Flex column gap="gap.smaller"\>
-
-    \<Header\>Task Module Demo\</Header\>
-
-    \<Text\>YouTube Video ID:\</Text\>
-
-    \<Input value={this.state.youTubeVideoId} disabled\>\</Input\>
-
-    \<Button content="Change Video ID" onClick={this.onChangeVideo}\>\</Button\>
-
-    \<Button content="Show Video" primary
-    onClick={this.onShowVideo}\>\</Button\>
-
-    \<Text content="(C) Copyright Contoso" size="smallest"\>\</Text\>
-
-    \</Flex\>
-
-    \</Provider\>
-
-    );
-
-    }
-
-10. The next step is to add some interactivity to the tab. Add the following
+1.  The next step is to add some interactivity to the tab. Add the following
     methods to the **YouTubePlayer1Tab** class. These methods will handle
     updating the state when specific events happen on the form you'll add to the
     component:
 
-    private onShowVideo = (event: React.MouseEvent\<HTMLButtonElement\>): void
-    =\> {
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+private onShowVideo = (event: React.MouseEvent<HTMLButtonElement>): void => {
+}
+private onChangeVideo = (event: React.MouseEvent<HTMLButtonElement>): void => {
+}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    }
+1.  **Save** this file.
 
-    private onChangeVideo = (event: React.MouseEvent\<HTMLButtonElement\>): void
-    =\> {
-
-    }
-
-11. **Save** this file.
-
-### **Task 4 - Test the personal tab**
+### Task 4 - Test the personal tab
 
 1.  On **Microsoft Teams** browser tab where you opened **YouTube Player**
     application, refresh the browser window.
@@ -342,7 +304,7 @@ Microsoft Teams client using the Microsoft Teams JavaScript SDK.
 
 4.  For **Terminate batch job (Y/N)?**, enter **Y** and press enter key.
 
-### **Task 5 - Add video player task module**
+### Task 5 - Add video player task module
 
 1.  Open the folder
     **C:\\Teams_Projects\\learn-msteams-taskmodules\\src\\app\\web\\youTubePlayer1Tab**.
@@ -351,145 +313,99 @@ Microsoft Teams client using the Microsoft Teams JavaScript SDK.
 
 3.  Add the following HTML to the **player.html** file:
 
-    \<!DOCTYPE html\>
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>YouTube Player Task Module</title>
+<style>
+#embed-container iframe {
+position: absolute;
+top: 0;
+left: 0;
+width: 95%;
+height: 95%;
+padding-left: 20px;
+padding-right: 20px;
+padding-top: 10px;
+padding-bottom: 10px;
+border-style: none;
+}
+</style>
+</head>
+<body>
+<div id="embed-container"></div>
+</body>
+</html>
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    \<html lang="en"\>
-
-    \<head\>
-
-    \<title\>YouTube Player Task Module\</title\>
-
-    \<style\>
-
-    \#embed-container iframe {
-
-    position: absolute;
-
-    top: 0;
-
-    left: 0;
-
-    width: 95%;
-
-    height: 95%;
-
-    padding-left: 20px;
-
-    padding-right: 20px;
-
-    padding-top: 10px;
-
-    padding-bottom: 10px;
-
-    border-style: none;
-
-    }
-
-    \</style\>
-
-    \</head\>
-
-    \<body\>
-
-    \<div id="embed-container"\>\</div\>
-
-    \</body\>
-
-    \</html\>
-
-4.  Implement the \<iframe\> embedded video player by adding the following
+1.  Implement the \<iframe\> embedded video player by adding the following
     JavaScript before the closing \</body\> tag in the **player.html** file:
 
-    \<script\>
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+<script>
+function getUrlParameter(name) {
+name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+var results = regex.exec(location.search);
+return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+};
+var element = document.createElement("iframe");
+element.src = "https://www.youtube.com/embed/" + getUrlParameter("vid");
+element.width = "1000";
+element.height = "700";
+element.frameborder = "0";
+element.allow = "autoplay; encrypted-media";
+element.allowfullscreen = "";
+document.getElementById("embed-container").appendChild(element);
+</script>
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    function getUrlParameter(name) {
+1.  **Save** this file and close it.
 
-    name = name.replace(/[\\[]/, '\\\\[').replace(/[\\]]/, '\\\\]');
-
-    var regex = new RegExp('[\\\\?&]' + name + '=([\^&\#]\*)');
-
-    var results = regex.exec(location.search);
-
-    return results === null ? '' : decodeURIComponent(results[1].replace(/\\+/g,
-    ' '));
-
-    };
-
-    var element = document.createElement("iframe");
-
-    element.src = "https://www.youtube.com/embed/" + getUrlParameter("vid");
-
-    element.width = "1000";
-
-    element.height = "700";
-
-    element.frameborder = "0";
-
-    element.allow = "autoplay; encrypted-media";
-
-    element.allowfullscreen = "";
-
-    document.getElementById("embed-container").appendChild(element);
-
-    \</script\>
-
-5.  **Save** this file and close it.
-
-6.  Open the file
+2.  Open the file
     **C:\\Teams_Projects\\learn-msteams-taskmodules\\src\\app\\scripts\\youTubePlayer1Tab\\YouTubePlayer1Tab.tsx**.
 
-7.  First, add the following utility method to the YouTubePlayer1Tab class:
+3.  First, add the following utility method to the YouTubePlayer1Tab class:
 
-    private appRoot(): string {
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+private appRoot(): string {
+if (typeof window === "undefined") {
+return "https://{{HOSTNAME}}";
+} else {
+return window.location.protocol + "//" + window.location.host;
+}
+}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    if (typeof window === "undefined") {
+1.  Next, add the following code to the onShowVideo() method:
 
-    return "https://{{HOSTNAME}}";
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+private onShowVideo = (event: React.MouseEvent<HTMLButtonElement>): void => {
+const taskModuleInfo = {
+title: "YouTube Player",
+url: this.appRoot() + `/youTubePlayer1Tab/player.html?vid=${this.state.youTubeVideoId}`,
+width: 1000,
+height: 700
+};
+microsoftTeams.tasks.startTask(taskModuleInfo);
+}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    } else {
+>   This code will create a new taskInfo object with the details of the task
+>   module. It will then launch the task module. This task module does nothing
+>   but display information, so we don't need to implement the callback.
 
-    return window.location.protocol + "//" + window.location.host;
+1.  **Save** this file.
 
-    }
-
-    }
-
-8.  Next, add the following code to the onShowVideo() method:
-
-    private onShowVideo = (event: React.MouseEvent\<HTMLButtonElement\>): void
-    =\> {
-
-    const taskModuleInfo = {
-
-    title: "YouTube Player",
-
-    url: this.appRoot() +
-    \`/youTubePlayer1Tab/player.html?vid=\${this.state.youTubeVideoId}\`,
-
-    width: 1000,
-
-    height: 700
-
-    };
-
-    microsoftTeams.tasks.startTask(taskModuleInfo);
-
-    }
-
-    This code will create a new taskInfo object with the details of the task
-    module. It will then launch the task module. This task module does nothing
-    but display information, so we don't need to implement the callback.
-
-9.  **Save** this file.
-
-10. Open the file
+2.  Open the file
     **C:\\Teams_Projects\\learn-msteams-taskmodules\\src\\manifest\\manifest.json**.
 
-11. Locate the **version** property and assign it a value of **0.0.3**.
+3.  Locate the **version** property and assign it a value of **0.0.3**.
 
-12. **Save** this file and close it.
+4.  **Save** this file and close it.
 
-### **Task 6 – Test the video player task module**
+### Task 6 – Test the video player task module
 
 1.  On **Command Prompt**, ensure that you are in
     **C:\\Teams_Projects\\learn-msteams-taskmodules** directory and run the
@@ -526,13 +442,13 @@ Microsoft Teams client using the Microsoft Teams JavaScript SDK.
 
 11. For **Terminate batch job (Y/N)?**, enter **Y** and press enter key.
 
-## **Exercise 2 - Using adaptive cards and deep links in task modules**
+## Exercise 2 - Using adaptive cards and deep links in task modules
 
 In this exercise, you'll learn how to use adaptive cards in a custom task module
 in a custom Microsoft Teams app. You'll also learn how to invoke task modules
 from anywhere within Microsoft Teams using deep links.
 
-### **Task 1 - Create video selector as an adaptive card**
+### Task 1 - Create video selector as an adaptive card
 
 1.  On your **Microsoft Teams** browser tab, click on **More added apps** button
     (**…**) and then select **App Studio**.
@@ -554,84 +470,47 @@ from anywhere within Microsoft Teams using deep links.
 6.  From the **json** tab, replace the contents of the default card with the
     following JSON:
 
-    {
-
-    "\$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
-
-    "type": "AdaptiveCard",
-
-    "version": "1.0",
-
-    "body": [
-
-    {
-
-    "type": "Container",
-
-    "items": [
-
-    {
-
-    "type": "TextBlock",
-
-    "text": "YouTube Video Selector",
-
-    "weight": "bolder",
-
-    "size": "extraLarge"
-
-    }
-
-    ]
-
-    },
-
-    {
-
-    "type": "Container",
-
-    "items": [
-
-    {
-
-    "type": "TextBlock",
-
-    "text": "Enter the ID of a YouTube video to show in the task module
-    player.",
-
-    "wrap": true
-
-    },
-
-    {
-
-    "type": "Input.Text",
-
-    "id": "youTubeVideoId",
-
-    "value": ""
-
-    }
-
-    ]
-
-    }
-
-    ],
-
-    "actions": [
-
-    {
-
-    "type": "Action.Submit",
-
-    "title": "Update"
-
-    }
-
-    ]
-
-    }
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+{
+"$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+"type": "AdaptiveCard",
+"version": "1.0",
+"body": [
+{
+"type": "Container",
+"items": [
+{
+"type": "TextBlock",
+"text": "YouTube Video Selector",
+"weight": "bolder",
+"size": "extraLarge"
+}
+]
+},
+{
+"type": "Container",
+"items": [
+{
+"type": "TextBlock",
+"text": "Enter the ID of a YouTube video to show in the task module player.",
+"wrap": true
+},
+{
+"type": "Input.Text",
+"id": "youTubeVideoId",
+"value": ""
+}
+]
+}
+],
+"actions": [
+{
+"type": "Action.Submit",
+"title": "Update"
+}
+]
+}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 1.  This JSON code instructs Microsoft Teams to render a textbox and button.
     When the button is selected, it will submit the card.
@@ -640,7 +519,7 @@ from anywhere within Microsoft Teams using deep links.
     the folder
     **C:\\Teams_Projects\\learn-msteams-taskmodules\\src\\app\\scripts\\youTubePlayer1Tab**.
 
-### **Task 2 - Create a new task module that uses the Adaptive Card**
+### Task 2 - Create a new task module that uses the Adaptive Card
 
 1.  Open the file
     **C:\\Teams_Projects\\learn-msteams-taskmodules\\src\\app\\scripts\\youTubePlayer1Tab\\YouTubePlayer1Tab.tsx**.
@@ -648,98 +527,79 @@ from anywhere within Microsoft Teams using deep links.
 2.  Locate the render() method and add the following code to add a button after
     one of the existing buttons:
 
-    \<Button content="Change Video ID (AdaptiveCard)"
-    onClick={this.onChangeVideoAdaptiveCard}\>\</Button\>
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+<Button content="Change Video ID (AdaptiveCard)" onClick={this.onChangeVideoAdaptiveCard}></Button>
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-3.  Next, add the following method to the YouTubePlayer1Tab class:
+1.  Next, add the following method to the YouTubePlayer1Tab class:
 
-    private onChangeVideoAdaptiveCard = (event:
-    React.MouseEvent\<HTMLButtonElement\>): void =\> {
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+private onChangeVideoAdaptiveCard = (event: React.MouseEvent<HTMLButtonElement>): void => {
+const taskModuleInfo = {
+title: "YouTube Video Selector",
+width: 350,
+height: 250
+};
+const submitHandler = (err: string, result: any): void => {
+};
+microsoftTeams.tasks.startTask(taskModuleInfo, submitHandler);
+}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    const taskModuleInfo = {
-
-    title: "YouTube Video Selector",
-
-    width: 350,
-
-    height: 250
-
-    };
-
-    const submitHandler = (err: string, result: any): void =\> {
-
-    };
-
-    microsoftTeams.tasks.startTask(taskModuleInfo, submitHandler);
-
-    }
-
-4.  The first step is to load the Adaptive Card and set the value of the video
+1.  The first step is to load the Adaptive Card and set the value of the video
     ID to display when it loads. Do this by adding the following code to the
     beginnings of the onChangeVideoAdaptiveCard() method:
 
-    // load adaptive card
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// load adaptive card
+const adaptiveCard: any = require("./YouTubeSelectorCard.json");
+// update card with current video ID
+adaptiveCard.body.forEach((container: any) => {
+if (container.type === "Container") {
+container.items.forEach((item: any) => {
+if (item.id && item.id === "youTubeVideoId") {
+item.value = this.state.youTubeVideoId;
+}
+});
+}
+});
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    const adaptiveCard: any = require("./YouTubeSelectorCard.json");
-
-    // update card with current video ID
-
-    adaptiveCard.body.forEach((container: any) =\> {
-
-    if (container.type === "Container") {
-
-    container.items.forEach((item: any) =\> {
-
-    if (item.id && item.id === "youTubeVideoId") {
-
-    item.value = this.state.youTubeVideoId;
-
-    }
-
-    });
-
-    }
-
-    });
-
-5.  Next, implement the callback. When the Adaptive Card executes the submit
+1.  Next, implement the callback. When the Adaptive Card executes the submit
     action, it will send an object back with all the input objects as
     properties. Add the following code to the existing submitHandler() in the
     onChangeVideoAdaptiveCard() function. This code will update the state with
     the value of the video ID specified in the Adaptive Card:
 
-    this.setState(Object.assign({}, this.state, {
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+this.setState(Object.assign({}, this.state, {
+youTubeVideoId: result.youTubeVideoId
+}));
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    youTubeVideoId: result.youTubeVideoId
-
-    }));
-
-6.  Lastly, add a new card property to the taskModuleInfo object, and set its
+1.  Lastly, add a new card property to the taskModuleInfo object, and set its
     value to the adaptive card. The resulting taskModuleInfo should look like
     the following code:
 
-    const taskModuleInfo = {
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+const taskModuleInfo = {
+title: "YouTube Video Selector",
+card: adaptiveCard,
+width: 350,
+height: 250
+};
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    title: "YouTube Video Selector",
+1.  **Save** this file.
 
-    card: adaptiveCard,
-
-    width: 350,
-
-    height: 250
-
-    };
-
-7.  **Save** this file.
-
-8.  Open the file
+2.  Open the file
     **C:\\Teams_Projects\\learn-msteams-taskmodules\\src\\manifest\\manifest.json**.
 
-9.  Locate the **version** property and assign it a value of **0.0.4**.
+3.  Locate the **version** property and assign it a value of **0.0.4**.
 
-10. **Save** this file and close it.
+4.  **Save** this file and close it.
 
-### **Task 3 - Test the Adaptive Card task module**
+### Task 3 - Test the Adaptive Card task module
 
 1.  On **Command Prompt**, ensure that you are in
     **C:\\Teams_Projects\\learn-msteams-taskmodules** directory and run the
@@ -756,7 +616,7 @@ from anywhere within Microsoft Teams using deep links.
 4.  Click **Update**.
 
 5.  Browse and select
-    **C:\\Teams_Projects\\learn-msteams-taskmodules\\package\\YouTubePlayer.zip**
+    **C:\\Teams\_Projects\\learn-msteams-taskmodules\\package\\YouTubePlayer.zip**
     and click **Open**. The app should be updated.
 
 6.  Refresh your web browser window. Microsoft Teams will display a tile for
@@ -775,15 +635,17 @@ from anywhere within Microsoft Teams using deep links.
 11. Notice the video ID displayed in the tab is updated to reflect this new
     value.
 
-### **Task 4 - Invoking task modules with deep links**
+### Task 4 - Invoking task modules with deep links
 
 Task modules can be invoked by selecting a button in the Microsoft Teams
-experience, or using a deep link. Deep links allow you to trigger a task module
+experience or using a deep link. Deep links allow you to trigger a task module
 invocation from outside of teams, or within teams from a conversation.
 
 The format for a deep link is as follows:
 
-https://teams.microsoft.com/l/task/\<APP_ID\>?url=\<TaskInfo.url\>&height=\<TaskInfo.height\>&width=\<TaskInfo.width\>&title=\<TaskInfo.title\>
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+https://teams.microsoft.com/l/task/<APP_ID>?url=<TaskInfo.url>&height=<TaskInfo.height>&width=<TaskInfo.width>&title=<TaskInfo.title>
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Consider if you wanted to open a task module from a conversation that would
 display the following video on an [**Overview of teams and
@@ -792,13 +654,17 @@ channels**](https://www.youtube.com/watch?v=VlEH4vtaxp4).
 As you learned in a previous exercise, the URL to display the video in the
 player task module would be the following:
 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 https://{{REPLACE_WITH_YOUR_NGROK_URL}}/youTubePlayer1Tab/player.html?vid=VlEH4vtaxp4
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The deep link to launch the video player task module would be the following
 (*assuming your custom Microsoft Teams app's ID is
 3386faf0-109f-11ea-9799-77a28170bd5d*):
 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 https://teams.microsoft.com/l/task/3386faf0-109f-11ea-9799-77a28170bd5d?url=https://{{REPLACE_WITH_YOUR_NGROK_URL}}/youTubePlayer1Tab/player.html?vid=VlEH4vtaxp4&height=700&width=1000&title=YouTube%20Player:%20Overview%20of%20teams%20and%20channels
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 1.  In Microsoft teams, in the left navigation pane, click **Teams**. Go to a
     channel and click **New conversation**.
@@ -815,25 +681,27 @@ https://teams.microsoft.com/l/task/3386faf0-109f-11ea-9799-77a28170bd5d?url=http
 
 2.  In **Insert link** panel, in **Address** field, provide the link
 
-    https://teams.microsoft.com/l/task/{{APP_ID}}?url=https://{{REPLACE_WITH_YOUR_NGROK_URL}}/youTubePlayer1Tab/player.html?vid=VlEH4vtaxp4&height=700&width=1000&title=YouTube%20Player:%20Overview%20of%20teams%20and%20channels
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+https://teams.microsoft.com/l/task/{{APP_ID}}?url=https://{{REPLACE_WITH_YOUR_NGROK_URL}}/youTubePlayer1Tab/player.html?vid=VlEH4vtaxp4&height=700&width=1000&title=YouTube%20Player:%20Overview%20of%20teams%20and%20channels
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-3.  Replace the **{{APP_ID}}** with the **APPLICATION_ID** value available in
+1.  Replace the **{{APP_ID}}** with the **APPLICATION_ID** value available in
     **C:\\Teams_Projects\\learn-msteams-taskmodules\\.env** file. And also
     update the **{{REPLACE_WITH_YOUR_NGROK_URL}}** with your ngrok url value.
 
-4.  Click **Insert**.
+2.  Click **Insert**.
 
-5.  Now click **Send** to send this message.
+3.  Now click **Send** to send this message.
 
-6.  Now, click on the link to see the task module open without having to trigger
+4.  Now, click on the link to see the task module open without having to trigger
     it from the custom tab.
 
-7.  Stop the local web server by selecting Ctrl+C in the console to stop the
+5.  Stop the local web server by selecting Ctrl+C in the console to stop the
     running process.
 
-8.  For **Terminate batch job (Y/N)?**, enter **Y** and press enter key.
+6.  For **Terminate batch job (Y/N)?**, enter **Y** and press enter key.
 
-## **Exercise 3 - Using task modules with bots**
+## Exercise 3 - Using task modules with bots
 
 In this exercise, you'll learn how to use task modules with bots in Microsoft
 Teams.
@@ -842,7 +710,7 @@ The first step will be to create a bot and add it to our existing Microsoft
 Teams app. You'll then extend the bot to support the existing task modules to
 display a video and change the selected video.
 
-### **Task 1 - Register a new bot** 
+### Task 1 - Register a new bot
 
 1.  Open a new browser tab and navigate to the following URL:
 
@@ -949,7 +817,7 @@ display a video and change the selected video.
 
 11. Copy the value of the secret to a notepad, as you'll need it later.
 
-### **Task 2 - Update the Microsoft Teams app project** 
+### Task 2 - Update the Microsoft Teams app project
 
 1.  Open the file **C:\\Teams_Projects\\learn-msteams-taskmodules\\.env**.
 
@@ -969,157 +837,100 @@ display a video and change the selected video.
         this empty collection with the following. Ensure you use the same Azure
         AD app ID for the botId in the following code:
 
-        "bots": [
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+"bots": [
+{
+"botId": "{{MICROSOFT_APP_ID}}",
+"scopes": [
+"personal"
+],
+"supportsFiles": false,
+"isNotificationOnly": false,
+"commandLists": [
+{
+"scopes": [ "personal" ],
+"commands": [
+{
+"title": "MentionMe",
+"description": "Sends message with @mention of the sender"
+}
+]
+}
+]
+}
+],
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-        {
+1.  **Save** this file and close it.
 
-        "botId": "{{MICROSOFT_APP_ID}}",
-
-        "scopes": [
-
-        "personal"
-
-        ],
-
-        "supportsFiles": false,
-
-        "isNotificationOnly": false,
-
-        "commandLists": [
-
-        {
-
-        "scopes": [ "personal" ],
-
-        "commands": [
-
-        {
-
-        "title": "MentionMe",
-
-        "description": "Sends message with @mention of the sender"
-
-        }
-
-        ]
-
-        }
-
-        ]
-
-        }
-
-        ],
-
-    6.  **Save** this file and close it.
-
-    7.  Go to the folder
+    1.  Go to the folder
         **C:\\Teams_Projects\\learn-msteams-taskmodules\\src\\app**.
 
-    8.  Create a new sub-folder named **learningTeamsBot**.
+    2.  Create a new sub-folder named **learningTeamsBot**.
 
-    9.  In this new sub-folder, create a new file named **learningTeamsBot.ts**.
+    3.  In this new sub-folder, create a new file named **learningTeamsBot.ts**.
 
-    10. Add the following code to the **learningTeamsBot.ts** file:
+    4.  Add the following code to the **learningTeamsBot.ts** file:
 
-        import { BotDeclaration, } from "express-msteams-host";
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+import { BotDeclaration, } from "express-msteams-host";
+import {
+ActionTypes,
+CardFactory, MemoryStorage, MessageFactory,
+TeamsActivityHandler, TaskModuleTaskInfo,
+TurnContext, TaskModuleRequest, TaskModuleResponse
+} from "botbuilder";
+import * as Util from "util";
+const TextEncoder = Util.TextEncoder;
+@BotDeclaration(
+"/api/messages",
+new MemoryStorage(),
+process.env.MICROSOFT_APP_ID,
+process.env.MICROSOFT_APP_PASSWORD)
+export class LearningTeamsBot extends TeamsActivityHandler {
+constructor() {
+super();
+// create handlers
+this.onMessage(async (context, next) => {
+switch (context.activity.text.trim().toLowerCase()) {
+case "mentionme":
+await this.mentionActivity(context);
+break;
+default:
+const card = CardFactory.heroCard("Learn Microsoft Teams", undefined, [ ]);
+await context.sendActivity({ attachments: [card] });
+break;
+}
+await next();
+});
+}
+private async mentionActivity(context: TurnContext) {
+const mention = {
+mentioned: context.activity.from,
+text: `<at>${new TextEncoder().encode(context.activity.from.name)}</at>`,
+type: "mention"
+};
+const replyActivity = MessageFactory.text(`Hi ${mention.text}`);
+replyActivity.entities = [mention];
+await context.sendActivity(replyActivity);
+}
+}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-        import {
+1.  **Save** this file and close it.
 
-        ActionTypes,
-
-        CardFactory, MemoryStorage, MessageFactory,
-
-        TeamsActivityHandler, TaskModuleTaskInfo,
-
-        TurnContext, TaskModuleRequest, TaskModuleResponse
-
-        } from "botbuilder";
-
-        import \* as Util from "util";
-
-        const TextEncoder = Util.TextEncoder;
-
-        @BotDeclaration(
-
-        "/api/messages",
-
-        new MemoryStorage(),
-
-        process.env.MICROSOFT_APP_ID,
-
-        process.env.MICROSOFT_APP_PASSWORD)
-
-        export class LearningTeamsBot extends TeamsActivityHandler {
-
-        constructor() {
-
-        super();
-
-        // create handlers
-
-        this.onMessage(async (context, next) =\> {
-
-        switch (context.activity.text.trim().toLowerCase()) {
-
-        case "mentionme":
-
-        await this.mentionActivity(context);
-
-        break;
-
-        default:
-
-        const card = CardFactory.heroCard("Learn Microsoft Teams", undefined, [
-        ]);
-
-        await context.sendActivity({ attachments: [card] });
-
-        break;
-
-        }
-
-        await next();
-
-        });
-
-        }
-
-        private async mentionActivity(context: TurnContext) {
-
-        const mention = {
-
-        mentioned: context.activity.from,
-
-        text: \`\<at\>\${new
-        TextEncoder().encode(context.activity.from.name)}\</at\>\`,
-
-        type: "mention"
-
-        };
-
-        const replyActivity = MessageFactory.text(\`Hi \${mention.text}\`);
-
-        replyActivity.entities = [mention];
-
-        await context.sendActivity(replyActivity);
-
-        }
-
-        }
-
-    11. **Save** this file and close it.
-
-    12. Open the file
+    1.  Open the file
         **C:\\Teams_Projects\\learn-msteams-taskmodules\\src\\app\\TeamsAppsComponents.ts.**
 
-    13. Add the following line to the to this file:
+    2.  Add the following line to the to this file:
 
-        export \* from "./learningTeamsBot/learningTeamsBot";
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+export * from "./learningTeamsBot/learningTeamsBot";
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    14. **Save** this file and close it.
+1.  **Save** this file and close it.
 
-### **Task 3 - Test the bot in Microsoft Teams**
+### Task 3 - Test the bot in Microsoft Teams
 
 1.  On **Command Prompt**, ensure that you are in
     **C:\\Teams_Projects\\learn-msteams-taskmodules** directory and run the
@@ -1188,7 +999,7 @@ display a video and change the selected video.
 
     ![](media/2ac86b36985df5ed71ed56669adf40d1.png)
 
-### **Task 4 - Add the video player task module**
+### Task 4 - Add the video player task module
 
 1.  Open the file
     **C:\\Teams_Projects\\learn-msteams-taskmodules\\src\\app\\learningTeamsBot\\learningTeamsBot.ts**.
@@ -1196,35 +1007,32 @@ display a video and change the selected video.
 2.  Locate the class constructor. Locate Hero card statement in the switch
     statement's default path in the onMessage() handler:
 
-    const card = CardFactory.heroCard("Learn Microsoft Teams", undefined, [ ]);
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+const card = CardFactory.heroCard("Learn Microsoft Teams", undefined, [ ]);
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-3.  Update this statement to add a new action to the card. The type of this
+1.  Update this statement to add a new action to the card. The type of this
     action is special: invoke.
 
-    const card = CardFactory.heroCard("Learn Microsoft Teams", undefined, [
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+const card = CardFactory.heroCard("Learn Microsoft Teams", undefined, [
+{
+type: "invoke",
+title: "Watch 'Task-oriented interactions in Microsoft Teams with messaging extensions'",
+value: { type: "task/fetch", taskModule: "player", videoId: "aHoRK8cr6Og" }
+}
+]);
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    {
+1.  **Save** this file.
 
-    type: "invoke",
-
-    title: "Watch 'Task-oriented interactions in Microsoft Teams with messaging
-    extensions'",
-
-    value: { type: "task/fetch", taskModule: "player", videoId: "aHoRK8cr6Og" }
-
-    }
-
-    ]);
-
-4.  **Save** this file.
-
-5.  The project's **ngrok-serve** task will detect the code change, rebuild &
+2.  The project's **ngrok-serve** task will detect the code change, rebuild &
     restart the web server. After a moment, enter another random string in the
     **Conversations** tab for the bot and notice the new card:
 
     ![](media/936e9236d1ad61fffd5649c8da5590f5.png)
 
-6.  In the file
+3.  In the file
     **C:\\Teams_Projects\\learn-msteams-taskmodules\\src\\app\\learningTeamsBot\\learningTeamsBot.ts**,
     the bot framework is looking for messages of type invoke with their
     value.type property set to task/fetch. For each one it finds, it passes it
@@ -1232,78 +1040,45 @@ display a video and change the selected video.
     select the action, implement the method. Add the following code to the
     LearningTeamsBot class:
 
-    protected handleTeamsTaskModuleFetch(context: TurnContext, request:
-    TaskModuleRequest): Promise\<TaskModuleResponse\> {
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+protected handleTeamsTaskModuleFetch(context: TurnContext, request: TaskModuleRequest): Promise<TaskModuleResponse> {
+let response: TaskModuleResponse;
+switch (request.data.taskModule) {
+case "player":
+response = ({
+task: {
+type: "continue",
+value: {
+title: "YouTube Player",
+url: `https://${process.env.HOSTNAME}/youTubePlayer1Tab/player.html?vid=${request.data.videoId}`,
+width: 1000,
+height: 700
+} as TaskModuleTaskInfo
+}
+} as TaskModuleResponse);
+break;
+default:
+response = ({
+task: {
+type: "continue",
+value: {
+title: "YouTube Player",
+url: `https://${process.env.HOSTNAME}/youTubePlayer1Tab/player.html?vid=X8krAMdGvCQ&default=1`,
+width: 1000,
+height: 700
+} as TaskModuleTaskInfo
+}
+} as TaskModuleResponse);
+break;
+};
+console.log("handleTeamsTaskModuleFetch() response", response);
+return Promise.resolve(response);
+}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    let response: TaskModuleResponse;
+1.  **Save** this file.
 
-    switch (request.data.taskModule) {
-
-    case "player":
-
-    response = ({
-
-    task: {
-
-    type: "continue",
-
-    value: {
-
-    title: "YouTube Player",
-
-    url:
-    \`https://\${process.env.HOSTNAME}/youTubePlayer1Tab/player.html?vid=\${request.data.videoId}\`,
-
-    width: 1000,
-
-    height: 700
-
-    } as TaskModuleTaskInfo
-
-    }
-
-    } as TaskModuleResponse);
-
-    break;
-
-    default:
-
-    response = ({
-
-    task: {
-
-    type: "continue",
-
-    value: {
-
-    title: "YouTube Player",
-
-    url:
-    \`https://\${process.env.HOSTNAME}/youTubePlayer1Tab/player.html?vid=X8krAMdGvCQ&default=1\`,
-
-    width: 1000,
-
-    height: 700
-
-    } as TaskModuleTaskInfo
-
-    }
-
-    } as TaskModuleResponse);
-
-    break;
-
-    };
-
-    console.log("handleTeamsTaskModuleFetch() response", response);
-
-    return Promise.resolve(response);
-
-    }
-
-7.  **Save** this file.
-
-8.  The project's **ngrok-serve** task will detect the code change, rebuild &
+2.  The project's **ngrok-serve** task will detect the code change, rebuild &
     restart the web server. Once that's happened, in **Microsoft Teams**, click
     on the **Watch Task oriented interactions in Microsoft Teams with messaging
     extensions** button in the Hero card. Notice the task module from the
@@ -1311,56 +1086,40 @@ display a video and change the selected video.
 
     ![](media/b49c7d785b9dd7c64dd00f88ce2eea19.png)
 
-9.  Create a few more buttons to the Hero card that reference different videos
+3.  Create a few more buttons to the Hero card that reference different videos
     by duplicating the existing button. Make sure to create one that has the
     **value.taskModule** property set to something other than player so the
     handler takes the default path:
 
-    const card = CardFactory.heroCard("Learn Microsoft Teams", undefined, [
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+const card = CardFactory.heroCard("Learn Microsoft Teams", undefined, [
+{
+type: "invoke",
+title: "Watch 'Task-oriented interactions in Microsoft Teams with messaging extensions'",
+value: { type: "task/fetch", taskModule: "player", videoId: "aHoRK8cr6Og" }
+},
+{
+type: "invoke",
+title: "Watch 'Microsoft Teams embedded web experiences'",
+value: { type: "task/fetch", taskModule: "player", videoId: "AQcdZYkFPCY" }
+},
+{
+type: "invoke",
+title: "Watch a invalid action...",
+value: { type: "task/fetch", taskModule: "something", videoId: "hello-world" }
+}
+]);
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    {
+1.  **Save** the file.
 
-    type: "invoke",
-
-    title: "Watch 'Task-oriented interactions in Microsoft Teams with messaging
-    extensions'",
-
-    value: { type: "task/fetch", taskModule: "player", videoId: "aHoRK8cr6Og" }
-
-    },
-
-    {
-
-    type: "invoke",
-
-    title: "Watch 'Microsoft Teams embedded web experiences'",
-
-    value: { type: "task/fetch", taskModule: "player", videoId: "AQcdZYkFPCY" }
-
-    },
-
-    {
-
-    type: "invoke",
-
-    title: "Watch a invalid action...",
-
-    value: { type: "task/fetch", taskModule: "something", videoId: "hello-world"
-    }
-
-    }
-
-    ]);
-
-10. **Save** the file.
-
-11. The project's **ngrok-serve** task will detect the code change, rebuild &
+2.  The project's **ngrok-serve** task will detect the code change, rebuild &
     restart the web server. Once that’s happened, enter a random message and
     notice the new card:
 
     ![](media/138893372c44a1fbcc128b233540719d.png)
 
-### **Task 5 - Add the video selector Adaptive Card task module**
+### Task 5 - Add the video selector Adaptive Card task module
 
 1.  In the file
     **C:\\Teams_Projects\\learn-msteams-taskmodules\\src\\app\\learningTeamsBot\\learningTeamsBot.ts**,
@@ -1368,171 +1127,108 @@ display a video and change the selected video.
     Hero card. Add another action to the end, but notice this action specifies a
     different value.taskModule property:
 
-    {
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+{
+type: "invoke",
+title: "Watch Specific Video",
+value: { type: "task/fetch", taskModule: "selector", videoId: "QHPBw7F4OL4" }
+}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    type: "invoke",
-
-    title: "Watch Specific Video",
-
-    value: { type: "task/fetch", taskModule: "selector", videoId: "QHPBw7F4OL4"
-    }
-
-    }
-
-2.  You'll chain two task modules together. The first will display the Adaptive
+1.  You'll chain two task modules together. The first will display the Adaptive
     Card selector. Within the handleTeamsTaskModuleFetch() method, add the
     following case statement to the existing switch statement:
 
-    case "selector":
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+case "selector":
+response = ({
+task: {
+type: "continue",
+value: {
+title: "YouTube Video Selector",
+card: this.getSelectorAdaptiveCard(request.data.videoId),
+width: 350,
+height: 250
+} as TaskModuleTaskInfo
+}
+} as TaskModuleResponse);
+break;
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    response = ({
-
-    task: {
-
-    type: "continue",
-
-    value: {
-
-    title: "YouTube Video Selector",
-
-    card: this.getSelectorAdaptiveCard(request.data.videoId),
-
-    width: 350,
-
-    height: 250
-
-    } as TaskModuleTaskInfo
-
-    }
-
-    } as TaskModuleResponse);
-
-    break;
-
-3.  Add the following method to the LearningTeamsBot class. This will create an
+1.  Add the following method to the LearningTeamsBot class. This will create an
     Adaptive Card with an input control. This is the programmatic way of
     creating the same adaptive card from a previous exercise.
 
-    private getSelectorAdaptiveCard(defaultVideoId: string = "") {
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+private getSelectorAdaptiveCard(defaultVideoId: string = "") {
+return CardFactory.adaptiveCard({
+type: "AdaptiveCard",
+version: "1.0",
+body: [
+{
+type: "Container",
+items: [
+{
+type: "TextBlock",
+text: "YouTube Video Selector",
+weight: "bolder",
+size: "extraLarge"
+}
+]
+},
+{
+type: "Container",
+items: [
+{
+type: "TextBlock",
+text: "Enter the ID of a YouTube video to show in the task module player.",
+wrap: true
+},
+{
+type: "Input.Text",
+id: "youTubeVideoId",
+value: defaultVideoId
+}
+]
+}
+],
+actions: [
+{
+type: "Action.Submit",
+title: "Update"
+}
+]
+});
+}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    return CardFactory.adaptiveCard({
-
-    type: "AdaptiveCard",
-
-    version: "1.0",
-
-    body: [
-
-    {
-
-    type: "Container",
-
-    items: [
-
-    {
-
-    type: "TextBlock",
-
-    text: "YouTube Video Selector",
-
-    weight: "bolder",
-
-    size: "extraLarge"
-
-    }
-
-    ]
-
-    },
-
-    {
-
-    type: "Container",
-
-    items: [
-
-    {
-
-    type: "TextBlock",
-
-    text: "Enter the ID of a YouTube video to show in the task module player.",
-
-    wrap: true
-
-    },
-
-    {
-
-    type: "Input.Text",
-
-    id: "youTubeVideoId",
-
-    value: defaultVideoId
-
-    }
-
-    ]
-
-    }
-
-    ],
-
-    actions: [
-
-    {
-
-    type: "Action.Submit",
-
-    title: "Update"
-
-    }
-
-    ]
-
-    });
-
-    }
-
-4.  Next, add the handler for the Adaptive Card handler method. Similar to the
+1.  Next, add the handler for the Adaptive Card handler method. Similar to the
     task/fetch, we need to handle a submit, or task/submit. Do this by adding
     the following method to the LearningTeamsBot class:
 
-    protected handleTeamsTaskModuleSubmit(context: TurnContext, request:
-    TaskModuleRequest): Promise\<TaskModuleResponse\> {
-
-    const response: TaskModuleResponse = {
-
-    task: {
-
-    type: "continue",
-
-    value: {
-
-    title: "YouTube Player",
-
-    url:
-    \`https://\${process.env.HOSTNAME}/youTubePlayer1Tab/player.html?vid=\${request.data.youTubeVideoId}\`,
-
-    width: 1000,
-
-    height: 700
-
-    } as TaskModuleTaskInfo
-
-    }
-
-    } as TaskModuleResponse;
-
-    return Promise.resolve(response);
-
-    }
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+protected handleTeamsTaskModuleSubmit(context: TurnContext, request: TaskModuleRequest): Promise<TaskModuleResponse> {
+const response: TaskModuleResponse = {
+task: {
+type: "continue",
+value: {
+title: "YouTube Player",
+url: `https://${process.env.HOSTNAME}/youTubePlayer1Tab/player.html?vid=${request.data.youTubeVideoId}`,
+width: 1000,
+height: 700
+} as TaskModuleTaskInfo
+}
+} as TaskModuleResponse;
+return Promise.resolve(response);
+}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This handler will fetch the submitted video ID from the Adaptive Card and use it
 to present the player task module.
 
 1.  **Save** this file.
 
-### **Task 6 - Test the video selector Adaptive Card task module**
+### Task 6 - Test the video selector Adaptive Card task module
 
 1.  After saving your changes and giving the project a moment to rebuild and
     restart the webserver, enter another message and notice the card:
