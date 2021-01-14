@@ -1,6 +1,6 @@
-# **Lab 2 – Messaging Extensions**
+# Lab 2 – Messaging Extensions
 
-## **Before you start**
+## Before you start
 
 1.  Browse to <https://www.microsoftazurepass.com>
 
@@ -15,7 +15,7 @@
 
 ![](media/7226125cd35a4a14f7b579cc38c5f02a.png)
 
-## **Exercise 0 – Update Tenant Setup**
+## Exercise 0 – Update Tenant Setup
 
 1.  Open a new browser tab and navigate to the following URL:
 
@@ -66,14 +66,14 @@
 
 15. Click **Close**.
 
-## **Exercise 1- Create action command messaging extensions**
+## Exercise 1- Create action command messaging extensions
 
 In this exercise, you'll create an action command messaging extension for a
 custom Microsoft Teams app. Action commands allow you present your users with a
 modal popup to collect or display information, then process their interaction
 and send information back to Teams.
 
-### **Task 1 - Register a new bot** 
+### Task 1 - Register a new bot
 
 1.  Open a new browser tab and navigate to the following URL:
 
@@ -180,7 +180,7 @@ and send information back to Teams.
 
 11. Copy the value of the secret to a notepad, as you'll need it later.
 
-### **Task 2 – Create Microsoft Teams App**
+### Task 2 – Create Microsoft Teams App
 
 1.  Open **Command Prompt**.
 
@@ -294,77 +294,64 @@ and send information back to Teams.
 
 8.  Add the following code at the end of the existing code in this file:
 
-    export \* from "./planetBot/planetBot";
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+export * from "./planetBot/planetBot";
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-9.  **Save** this file and then close it.
+1.  **Save** this file and then close it.
 
-10. In the same folder, open the file **server.ts**.
+2.  In the same folder, open the file **server.ts**.
 
-11. Add the following two import statements after the initial existing import
+3.  Add the following two import statements after the initial existing import
     statements in the file:
 
-    import { BotFrameworkAdapter } from "botbuilder";
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+import { BotFrameworkAdapter } from "botbuilder";
+import { PlanetBot } from "./planetBot/planetBot";
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    import { PlanetBot } from "./planetBot/planetBot";
-
-12. Now configure the bot framework and call the bot when requests are received
+1.  Now configure the bot framework and call the bot when requests are received
     through the /api/messages path. Add the following code to the end of the
     file:
 
-    // register and load the bot
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// register and load the bot
+const botAdapter = new BotFrameworkAdapter({
+appId: process.env.MICROSOFT_APP_ID,
+appPassword: process.env.MICROSOFT_APP_PASSWORD
+});
+// configure what happens when there is an unhandled error by the bot
+botAdapter.onTurnError = async (context, error) => {
+console.error(`\n [bot.onTurnError] unhandled error: ${error}`);
+await context.sendTraceActivity("OnTurnError Trace", `${error}`, "https://www.botframework.com/schemas/error", "TurnError");
+await context.sendActivity("bot error");
+};
+// run the bot when messages are received on the specified path
+const bot = new PlanetBot();
+express.post("/api/messages", (request, response) => {
+botAdapter.processActivity(request, response, async (context) => {
+await bot.run(context);
+});
+});
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    const botAdapter = new BotFrameworkAdapter({
+1.  **Save** this file and then close it.
 
-    appId: process.env.MICROSOFT_APP_ID,
+2.  Open the **C:\\Teams_Projects\\learn-msteams-bots\\.env** file.
 
-    appPassword: process.env.MICROSOFT_APP_PASSWORD
-
-    });
-
-    // configure what happens when there is an unhandled error by the bot
-
-    botAdapter.onTurnError = async (context, error) =\> {
-
-    console.error(\`\\n [bot.onTurnError] unhandled error: \${error}\`);
-
-    await context.sendTraceActivity("OnTurnError Trace", \`\${error}\`,
-    "https://www.botframework.com/schemas/error", "TurnError");
-
-    await context.sendActivity("bot error");
-
-    };
-
-    // run the bot when messages are received on the specified path
-
-    const bot = new PlanetBot();
-
-    express.post("/api/messages", (request, response) =\> {
-
-    botAdapter.processActivity(request, response, async (context) =\> {
-
-    await bot.run(context);
-
-    });
-
-    });
-
-13. **Save** this file and then close it.
-
-14. Open the **C:\\Teams_Projects\\learn-msteams-bots\\.env** file.
-
-15. Locate the following section in the file, and set the values of the two
+3.  Locate the following section in the file, and set the values of the two
     properties, **Application Id** and secret **Value**, that you obtained when
     registering the bot in Task 1:
 
-    \# App Id and App Password for the Bot Framework bot
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# App Id and App Password for the Bot Framework bot
+MICROSOFT_APP_ID=
+MICROSOFT_APP_PASSWORD=
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    MICROSOFT_APP_ID=
+1.  **Save** the file and then close it.
 
-    MICROSOFT_APP_PASSWORD=
-
-16. **Save** the file and then close it.
-
-### **Task 3 - Register the messaging extension in the Microsoft Teams app**
+### Task 3 - Register the messaging extension in the Microsoft Teams app
 
 1.  Open the file
     **C:\\Teams_Projects\\learn-msteams-bots\\src\\manifest\\manifest.json**.
@@ -385,55 +372,39 @@ and send information back to Teams.
     JSON. This code will add our action command to the compose box and the
     action command in a message when it is installed.
 
-    "composeExtensions": [
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+"composeExtensions": [
+{
+"botId": "<REPLACE_WITH_MICROSOFT_APP_ID>",
+"canUpdateConfiguration": false,
+"commands": [
+{
+"id": "planetExpanderAction",
+"type": "action",
+"title": "Planet Expander",
+"description": "Lookup the details of a planet.",
+"context": [
+"compose",
+"message"
+],
+"fetchTask": true
+}
+]
+}
+]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    {
-
-    "botId": "\<REPLACE_WITH_MICROSOFT_APP_ID\>",
-
-    "canUpdateConfiguration": false,
-
-    "commands": [
-
-    {
-
-    "id": "planetExpanderAction",
-
-    "type": "action",
-
-    "title": "Planet Expander",
-
-    "description": "Lookup the details of a planet.",
-
-    "context": [
-
-    "compose",
-
-    "message"
-
-    ],
-
-    "fetchTask": true
-
-    }
-
-    ]
-
-    }
-
-    ]
-
-7.  Replace the \<REPLACE_WITH_MICROSOFT_APP_ID\> with the Azure AD app ID you
+1.  Replace the \<REPLACE_WITH_MICROSOFT_APP_ID\> with the Azure AD app ID you
     obtained when registering the bot.
 
-8.  **Save** the file and then close it.
+2.  **Save** the file and then close it.
 
-9.  On your **Command prompt** window, run the npm command to install the latest
+3.  On your **Command prompt** window, run the npm command to install the latest
     version of the SDK
 
     *npm install @microsoft/teams-js -S*
 
-### **Task 4 – Code the messaging extension**
+### Task 4 – Code the messaging extension
 
 In this section, you will code the action command for the messaging extension.
 Your action command, when triggered, will present the user with a modal dialog
@@ -446,319 +417,144 @@ command will use another adaptive card to add details about the selected planet.
 
 2.  Create a new file named **planets.json** and add the following JSON to it.
 
-    [
-
-    {
-
-    "id": "1",
-
-    "name": "Mercury",
-
-    "summary": "Mercury is the smallest and innermost planet in the Solar
-    System. Its orbit around the Sun takes 87.97 days, the shortest of all the
-    planets in the Solar System. It is named after the Roman deity Mercury, the
-    messenger of the gods.",
-
-    "solarOrbitYears": 0.24,
-
-    "solarOrbitAvgDistanceKm": 57909050,
-
-    "numSatellites": 0,
-
-    "wikiLink": "https://en.wikipedia.org/wiki/Mercury_(planet)",
-
-    "imageLink":
-    "https://upload.wikimedia.org/wikipedia/commons/d/d9/Mercury_in_color_-_Prockter07-edit1.jpg",
-
-    "imageAlt": "NASA/Johns Hopkins University Applied Physics
-    Laboratory/Carnegie Institution of Washington [Public domain]"
-
-    },
-
-    {
-
-    "id": "2",
-
-    "name": "Venus",
-
-    "summary": "Venus is the second planet from the Sun. It is named after the
-    Roman goddess of love and beauty. As the second-brightest natural object in
-    the night sky after the Moon, Venus can cast shadows and, rarely, is visible
-    to the naked eye in broad daylight. Venus lies within Earth's orbit, and so
-    never appears to venture far from the Sun, setting in the west just after
-    dusk and rising in the east a bit before dawn.",
-
-    "solarOrbitYears": 0.62,
-
-    "solarOrbitAvgDistanceKm": 108208000,
-
-    "numSatellites": 0,
-
-    "wikiLink": "https://en.wikipedia.org/wiki/Venus",
-
-    "imageLink":
-    "https://upload.wikimedia.org/wikipedia/commons/e/e5/Venus-real_color.jpg",
-
-    "imageAlt": "&quot;Image processing by R. Nunes&quot;, link to
-    http://www.astrosurf.com/nunes [Public domain]"
-
-    },
-
-    {
-
-    "id": "3",
-
-    "name": "Earth",
-
-    "summary": "Earth is the third planet from the Sun and the only astronomical
-    object known to harbor life. According to radiometric dating and other
-    sources of evidence, Earth formed over 4.5 billion years ago. Earth's
-    gravity interacts with other objects in space, especially the Sun and the
-    Moon, which is Earth's only natural satellite. Earth orbits around the Sun
-    in 365.256 days, a period known as an Earth sidereal year. During this time,
-    Earth rotates about its axis about 366.256 times.",
-
-    "solarOrbitYears": 1.00,
-
-    "solarOrbitAvgDistanceKm": 149597500,
-
-    "numSatellites": 1,
-
-    "wikiLink": "https://en.wikipedia.org/wiki/Earth",
-
-    "imageLink":
-    "https://upload.wikimedia.org/wikipedia/commons/9/97/The_Earth_seen_from_Apollo_17.jpg",
-
-    "imageAlt": "Apollo 17 [Public domain]"
-
-    },
-
-    {
-
-    "id": "4",
-
-    "name": "Mars",
-
-    "summary": "Mars is the fourth planet from the Sun and the second-smallest
-    planet in the Solar System after Mercury. In English, Mars carries a name of
-    the Roman god of war and is often referred to as the 'Red Planet'. The
-    latter refers to the effect of the iron oxide prevalent on Mars' surface,
-    which gives it a reddish appearance distinctive among the astronomical
-    bodies visible to the naked eye.",
-
-    "solarOrbitYears": 1.88,
-
-    "solarOrbitAvgDistanceKm": 134935000,
-
-    "numSatellites": 2,
-
-    "wikiLink": "https://en.wikipedia.org/wiki/Mars",
-
-    "imageLink":
-    "https://upload.wikimedia.org/wikipedia/commons/0/02/OSIRIS_Mars_true_color.jpg",
-
-    "imageAlt": "ESA - European Space Agency \&amp; Max-Planck Institute for
-    Solar System Research for OSIRIS Team
-    ESA/MPS/UPD/LAM/IAA/RSSD/INTA/UPM/DASP/IDA [CC BY-SA 3.0-IGO
-    (https://creativecommons.org/licenses/by-sa/3.0-igo)]"
-
-    },
-
-    {
-
-    "id": "5",
-
-    "name": "Jupiter",
-
-    "summary": "Jupiter is the fifth planet from the Sun and the largest in the
-    Solar System. It is a gas giant with a mass one-thousandth that of the Sun,
-    but two-and-a-half times that of all the other planets in the Solar System
-    combined. Jupiter is one of the brightest objects visible to the naked eye
-    in the night sky, and has been known to ancient civilizations since before
-    recorded history. It is named after the Roman god Jupiter. When viewed from
-    Earth, Jupiter can be bright enough for its reflected light to cast shadows,
-    and is on average the third-brightest natural object in the night sky after
-    the Moon and Venus.",
-
-    "solarOrbitYears": 11.86,
-
-    "solarOrbitAvgDistanceKm": 445336000,
-
-    "numSatellites": 78,
-
-    "wikiLink": "https://en.wikipedia.org/wiki/Jupiter",
-
-    "imageLink":
-    "https://upload.wikimedia.org/wikipedia/commons/5/50/Jupiter%2C_image_taken_by_NASA%27s_Hubble_Space_Telescope%2C_June_2019_-_Edited.jpg",
-
-    "imageAlt": "NASA, ESA, and A. Simon (NASA Goddard), edited by PlanetUser
-    [Public domain]"
-
-    },
-
-    {
-
-    "id": "6",
-
-    "name": "Saturn",
-
-    "summary": "Saturn is the sixth planet from the Sun and the second-largest
-    in the Solar System, after Jupiter. It is a gas giant with an average radius
-    about nine times that of Earth. It has only one-eighth the average density
-    of Earth; however, with its larger volume, Saturn is over 95 times more
-    massive. Saturn is named after the Roman god of wealth and agriculture; its
-    astronomical symbol (♄) represents the god's sickle.",
-
-    "solarOrbitYears": 29.46,
-
-    "solarOrbitAvgDistanceKm": 1433525000,
-
-    "numSatellites": 82,
-
-    "wikiLink": "https://en.wikipedia.org/wiki/Saturn",
-
-    "imageLink":
-    "https://upload.wikimedia.org/wikipedia/commons/c/c7/Saturn_during_Equinox.jpg",
-
-    "imageAlt": "NASA / JPL / Space Science Institute [Public domain]"
-
-    },
-
-    {
-
-    "id": "7",
-
-    "name": "Uranus",
-
-    "summary": "Uranus is the seventh planet from the Sun. It has the
-    third-largest planetary radius and fourth-largest planetary mass in the
-    Solar System. Uranus is similar in composition to Neptune, and both have
-    bulk chemical compositions which differ from that of the larger gas giants
-    Jupiter and Saturn. For this reason, scientists often classify Uranus and
-    Neptune as \\"ice giants\\" to distinguish them from the gas giants.",
-
-    "solarOrbitYears": 84.02,
-
-    "solarOrbitAvgDistanceKm": 2883000000,
-
-    "numSatellites": 27,
-
-    "wikiLink": "https://en.wikipedia.org/wiki/Uranus",
-
-    "imageLink":
-    "https://upload.wikimedia.org/wikipedia/commons/3/3d/Uranus2.jpg",
-
-    "imageAlt": "NASA/JPL-Caltech [Public domain]"
-
-    },
-
-    {
-
-    "id": "8",
-
-    "name": "Neptune",
-
-    "summary": "Neptune is the eighth and farthest known planet from the Sun in
-    the Solar System. In the Solar System, it is the fourth-largest planet by
-    diameter, the third-most-massive planet, and the densest giant planet.
-    Neptune is 17 times the mass of Earth, slightly more massive than its
-    near-twin Uranus. Neptune is denser and physically smaller than Uranus
-    because its greater mass causes more gravitational compression of its
-    atmosphere.",
-
-    "solarOrbitYears": 164.80,
-
-    "solarOrbitAvgDistanceKm": 4500000000,
-
-    "numSatellites": 14,
-
-    "wikiLink": "https://en.wikipedia.org/wiki/Neptune",
-
-    "imageLink":
-    "https://upload.wikimedia.org/wikipedia/commons/6/63/Neptune_-_Voyager_2_%2829347980845%29_flatten_crop.jpg",
-
-    "imageAlt": "Justin Cowart [CC BY
-    (https://creativecommons.org/licenses/by/2.0)]"
-
-    }
-
-    ]
-
-3.  **Save** the file and then close it.
-
-4.  In the same folder, create a new file named **planetSelectorCard.json** and
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[
+{
+"id": "1",
+"name": "Mercury",
+"summary": "Mercury is the smallest and innermost planet in the Solar System. Its orbit around the Sun takes 87.97 days, the shortest of all the planets in the Solar System. It is named after the Roman deity Mercury, the messenger of the gods.",
+"solarOrbitYears": 0.24,
+"solarOrbitAvgDistanceKm": 57909050,
+"numSatellites": 0,
+"wikiLink": "https://en.wikipedia.org/wiki/Mercury_(planet)",
+"imageLink": "https://upload.wikimedia.org/wikipedia/commons/d/d9/Mercury_in_color_-_Prockter07-edit1.jpg",
+"imageAlt": "NASA/Johns Hopkins University Applied Physics Laboratory/Carnegie Institution of Washington [Public domain]"
+},
+{
+"id": "2",
+"name": "Venus",
+"summary": "Venus is the second planet from the Sun. It is named after the Roman goddess of love and beauty. As the second-brightest natural object in the night sky after the Moon, Venus can cast shadows and, rarely, is visible to the naked eye in broad daylight. Venus lies within Earth's orbit, and so never appears to venture far from the Sun, setting in the west just after dusk and rising in the east a bit before dawn.",
+"solarOrbitYears": 0.62,
+"solarOrbitAvgDistanceKm": 108208000,
+"numSatellites": 0,
+"wikiLink": "https://en.wikipedia.org/wiki/Venus",
+"imageLink": "https://upload.wikimedia.org/wikipedia/commons/e/e5/Venus-real_color.jpg",
+"imageAlt": "&quot;Image processing by R. Nunes&quot;, link to http://www.astrosurf.com/nunes [Public domain]"
+},
+{
+"id": "3",
+"name": "Earth",
+"summary": "Earth is the third planet from the Sun and the only astronomical object known to harbor life. According to radiometric dating and other sources of evidence, Earth formed over 4.5 billion years ago. Earth's gravity interacts with other objects in space, especially the Sun and the Moon, which is Earth's only natural satellite. Earth orbits around the Sun in 365.256 days, a period known as an Earth sidereal year. During this time, Earth rotates about its axis about 366.256 times.",
+"solarOrbitYears": 1.00,
+"solarOrbitAvgDistanceKm": 149597500,
+"numSatellites": 1,
+"wikiLink": "https://en.wikipedia.org/wiki/Earth",
+"imageLink": "https://upload.wikimedia.org/wikipedia/commons/9/97/The_Earth_seen_from_Apollo_17.jpg",
+"imageAlt": "Apollo 17 [Public domain]"
+},
+{
+"id": "4",
+"name": "Mars",
+"summary": "Mars is the fourth planet from the Sun and the second-smallest planet in the Solar System after Mercury. In English, Mars carries a name of the Roman god of war and is often referred to as the 'Red Planet'. The latter refers to the effect of the iron oxide prevalent on Mars' surface, which gives it a reddish appearance distinctive among the astronomical bodies visible to the naked eye.",
+"solarOrbitYears": 1.88,
+"solarOrbitAvgDistanceKm": 134935000,
+"numSatellites": 2,
+"wikiLink": "https://en.wikipedia.org/wiki/Mars",
+"imageLink": "https://upload.wikimedia.org/wikipedia/commons/0/02/OSIRIS_Mars_true_color.jpg",
+"imageAlt": "ESA - European Space Agency &amp; Max-Planck Institute for Solar System Research for OSIRIS Team ESA/MPS/UPD/LAM/IAA/RSSD/INTA/UPM/DASP/IDA [CC BY-SA 3.0-IGO (https://creativecommons.org/licenses/by-sa/3.0-igo)]"
+},
+{
+"id": "5",
+"name": "Jupiter",
+"summary": "Jupiter is the fifth planet from the Sun and the largest in the Solar System. It is a gas giant with a mass one-thousandth that of the Sun, but two-and-a-half times that of all the other planets in the Solar System combined. Jupiter is one of the brightest objects visible to the naked eye in the night sky, and has been known to ancient civilizations since before recorded history. It is named after the Roman god Jupiter. When viewed from Earth, Jupiter can be bright enough for its reflected light to cast shadows, and is on average the third-brightest natural object in the night sky after the Moon and Venus.",
+"solarOrbitYears": 11.86,
+"solarOrbitAvgDistanceKm": 445336000,
+"numSatellites": 78,
+"wikiLink": "https://en.wikipedia.org/wiki/Jupiter",
+"imageLink": "https://upload.wikimedia.org/wikipedia/commons/5/50/Jupiter%2C_image_taken_by_NASA%27s_Hubble_Space_Telescope%2C_June_2019_-_Edited.jpg",
+"imageAlt": "NASA, ESA, and A. Simon (NASA Goddard), edited by PlanetUser [Public domain]"
+},
+{
+"id": "6",
+"name": "Saturn",
+"summary": "Saturn is the sixth planet from the Sun and the second-largest in the Solar System, after Jupiter. It is a gas giant with an average radius about nine times that of Earth. It has only one-eighth the average density of Earth; however, with its larger volume, Saturn is over 95 times more massive. Saturn is named after the Roman god of wealth and agriculture; its astronomical symbol (♄) represents the god's sickle.",
+"solarOrbitYears": 29.46,
+"solarOrbitAvgDistanceKm": 1433525000,
+"numSatellites": 82,
+"wikiLink": "https://en.wikipedia.org/wiki/Saturn",
+"imageLink": "https://upload.wikimedia.org/wikipedia/commons/c/c7/Saturn_during_Equinox.jpg",
+"imageAlt": "NASA / JPL / Space Science Institute [Public domain]"
+},
+{
+"id": "7",
+"name": "Uranus",
+"summary": "Uranus is the seventh planet from the Sun. It has the third-largest planetary radius and fourth-largest planetary mass in the Solar System. Uranus is similar in composition to Neptune, and both have bulk chemical compositions which differ from that of the larger gas giants Jupiter and Saturn. For this reason, scientists often classify Uranus and Neptune as \"ice giants\" to distinguish them from the gas giants.",
+"solarOrbitYears": 84.02,
+"solarOrbitAvgDistanceKm": 2883000000,
+"numSatellites": 27,
+"wikiLink": "https://en.wikipedia.org/wiki/Uranus",
+"imageLink": "https://upload.wikimedia.org/wikipedia/commons/3/3d/Uranus2.jpg",
+"imageAlt": "NASA/JPL-Caltech [Public domain]"
+},
+{
+"id": "8",
+"name": "Neptune",
+"summary": "Neptune is the eighth and farthest known planet from the Sun in the Solar System. In the Solar System, it is the fourth-largest planet by diameter, the third-most-massive planet, and the densest giant planet. Neptune is 17 times the mass of Earth, slightly more massive than its near-twin Uranus. Neptune is denser and physically smaller than Uranus because its greater mass causes more gravitational compression of its atmosphere.",
+"solarOrbitYears": 164.80,
+"solarOrbitAvgDistanceKm": 4500000000,
+"numSatellites": 14,
+"wikiLink": "https://en.wikipedia.org/wiki/Neptune",
+"imageLink": "https://upload.wikimedia.org/wikipedia/commons/6/63/Neptune_-%2829347980845%29_flatten_crop.jpg",
+"imageAlt": "Justin Cowart [CC BY (https://creativecommons.org/licenses/by/2.0)]"
+}
+]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+1.  **Save** the file and then close it.
+
+2.  In the same folder, create a new file named **planetSelectorCard.json** and
     add the following JSON to it. This file contains the Adaptive Card used to
     display the modal dialog
 
-    {
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+{
+"$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+"type": "AdaptiveCard",
+"version": "1.0",
+"body": [
+{
+"type": "Container",
+"items": [
+{
+"type": "TextBlock",
+"size": "medium",
+"isSubtle": true,
+"text": "Select a planet to insert into the message:"
+}
+]
+},
+{
+"type": "Input.ChoiceSet",
+"id": "planetSelector",
+"choices": []
+}
+],
+"actions": [
+{
+"type": "Action.Submit",
+"title": "Insert selected planet",
+"data":
+{
+"submitLocation": "messagingExtensionFetchTask"
+}
+}
+]
+}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    "\$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+1.  **Save** the file and then close it.
 
-    "type": "AdaptiveCard",
-
-    "version": "1.0",
-
-    "body": [
-
-    {
-
-    "type": "Container",
-
-    "items": [
-
-    {
-
-    "type": "TextBlock",
-
-    "size": "medium",
-
-    "isSubtle": true,
-
-    "text": "Select a planet to insert into the message:"
-
-    }
-
-    ]
-
-    },
-
-    {
-
-    "type": "Input.ChoiceSet",
-
-    "id": "planetSelector",
-
-    "choices": []
-
-    }
-
-    ],
-
-    "actions": [
-
-    {
-
-    "type": "Action.Submit",
-
-    "title": "Insert selected planet",
-
-    "data":
-
-    {
-
-    "submitLocation": "messagingExtensionFetchTask"
-
-    }
-
-    }
-
-    ]
-
-    }
-
-5.  **Save** the file and then close it.
-
-6.  To simplify working with collections, install the Lodash library. On your
+2.  To simplify working with collections, install the Lodash library. On your
     **Command prompt** window, make sure you are in
     **C:\\Teams_Projects\\learn-msteams-bots** directory and run the following
     commands:
@@ -767,93 +563,63 @@ command will use another adaptive card to add details about the selected planet.
 
     *npm install @types/lodash -D*
 
-7.  Open the
+3.  Open the
     **C:\\Teams_Projects\\learn-msteams-bots\\src\\app\\planetBot\\planetBot.ts**
     file and add the
 
     following import statement to import two functions from Lodash into the bot:
 
-    import { find, sortBy } from "lodash";
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+import { find, sortBy } from "lodash";
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-8.  Implement the action command messaging extension by implementing a
+1.  Implement the action command messaging extension by implementing a
     well-known method to the bot. Update the import statement for the
     **botbuilder** package to include the objects CardFactory,
     MessagingExtensionAction, MessagingExtensionActionResponse, &
     MessagingExtensionAttachment:
 
-    import {
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+import {
+TeamsActivityHandler,
+TurnContext,
+MessageFactory,
+CardFactory, MessagingExtensionAction, MessagingExtensionActionResponse, MessagingExtensionAttachment,
+} from "botbuilder";
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    TeamsActivityHandler,
+1.  Add the following method to the **PlanetBot** class:
 
-    TurnContext,
-
-    MessageFactory,
-
-    CardFactory, MessagingExtensionAction, MessagingExtensionActionResponse,
-    MessagingExtensionAttachment,
-
-    } from "botbuilder";
-
-9.  Add the following method to the **PlanetBot** class:
-
-    protected handleTeamsMessagingExtensionFetchTask(context: TurnContext,
-    action: MessagingExtensionAction):
-    Promise\<MessagingExtensionActionResponse\> {
-
-    // load planets & sort them by their order from the sun
-
-    const planets: any = require("./planets.json");
-
-    const sortedPlanets: any = sortBy(planets, ["id"])
-
-    .map((planet) =\> {
-
-    return { value: planet.id, title: planet.name };
-
-    });
-
-    // load card template
-
-    const adaptiveCardSource: any = require("./planetSelectorCard.json");
-
-    // locate the planet selector
-
-    const planetChoiceSet: any = find(adaptiveCardSource.body, { id:
-    "planetSelector" });
-
-    // update choice set with planets
-
-    planetChoiceSet.choices = sortedPlanets;
-
-    // load the adaptive card
-
-    const adaptiveCard = CardFactory.adaptiveCard(adaptiveCardSource);
-
-    const response: MessagingExtensionActionResponse = {
-
-    task: {
-
-    type: "continue",
-
-    value: {
-
-    card: adaptiveCard,
-
-    title: "Planet Selector",
-
-    height: 150,
-
-    width: 500
-
-    }
-
-    }
-
-    } as MessagingExtensionActionResponse;
-
-    return Promise.resolve(response);
-
-    }
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+protected handleTeamsMessagingExtensionFetchTask(context: TurnContext, action: MessagingExtensionAction): Promise<MessagingExtensionActionResponse> {
+// load planets & sort them by their order from the sun
+const planets: any = require("./planets.json");
+const sortedPlanets: any = sortBy(planets, ["id"])
+.map((planet) => {
+return { value: planet.id, title: planet.name };
+});
+// load card template
+const adaptiveCardSource: any = require("./planetSelectorCard.json");
+// locate the planet selector
+const planetChoiceSet: any = find(adaptiveCardSource.body, { id: "planetSelector" });
+// update choice set with planets
+planetChoiceSet.choices = sortedPlanets;
+// load the adaptive card
+const adaptiveCard = CardFactory.adaptiveCard(adaptiveCardSource);
+const response: MessagingExtensionActionResponse = {
+task: {
+type: "continue",
+value: {
+card: adaptiveCard,
+title: "Planet Selector",
+height: 150,
+width: 500
+}
+}
+} as MessagingExtensionActionResponse;
+return Promise.resolve(response);
+}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This method will first load the planets and sort them by their order from the
 sun. It then loads the Adaptive Card for the modal and updates the
@@ -871,232 +637,127 @@ communicate with Microsoft Teams to display the card.
     JSON to it. This file contains the Adaptive Card used to generate the
     details of the planet:
 
-    {
-
-    "\$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
-
-    "type": "AdaptiveCard",
-
-    "version": "1.0",
-
-    "body": [
-
-    {
-
-    "id": "cardHeader",
-
-    "type": "Container",
-
-    "items": [
-
-    {
-
-    "id": "planetName",
-
-    "type": "TextBlock",
-
-    "weight": "bolder",
-
-    "size": "medium"
-
-    }
-
-    ]
-
-    },
-
-    {
-
-    "type": "Container",
-
-    "id": "cardBody",
-
-    "items": [
-
-    {
-
-    "id": "planetSummary",
-
-    "type": "TextBlock",
-
-    "wrap": true
-
-    },
-
-    {
-
-    "id": "planetDetails",
-
-    "type": "ColumnSet",
-
-    "columns": [
-
-    {
-
-    "type": "Column",
-
-    "width": "100",
-
-    "items": [
-
-    {
-
-    "id": "planetImage",
-
-    "size": "stretch",
-
-    "type": "Image"
-
-    }
-
-    ]
-
-    },
-
-    {
-
-    "type": "Column",
-
-    "width": "250",
-
-    "items": [
-
-    {
-
-    "type": "FactSet",
-
-    "facts": [
-
-    {
-
-    "id": "orderFromSun",
-
-    "title": "Order from the sun:"
-
-    },
-
-    {
-
-    "id": "planetNumSatellites",
-
-    "title": "Known satellites:"
-
-    },
-
-    {
-
-    "id": "solarOrbitYears",
-
-    "title": "Solar orbit (\*Earth years\*):"
-
-    },
-
-    {
-
-    "id": "solarOrbitAvgDistanceKm",
-
-    "title": "Average distance from the sun (\*km\*):"
-
-    }
-
-    ]
-
-    }
-
-    ]
-
-    }
-
-    ]
-
-    },
-
-    {
-
-    "id": "imageAttribution",
-
-    "type": "TextBlock",
-
-    "size": "medium",
-
-    "isSubtle": true,
-
-    "wrap": true
-
-    }
-
-    ]
-
-    }
-
-    ],
-
-    "actions": [
-
-    {
-
-    "type": "Action.OpenUrl",
-
-    "title": "Learn more on Wikipedia"
-
-    }
-
-    ]
-
-    }
-
-4.  **Save** this file and close it.
-
-5.  Now, we will add a handler to process the message when the messaging
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+{
+"$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+"type": "AdaptiveCard",
+"version": "1.0",
+"body": [
+{
+"id": "cardHeader",
+"type": "Container",
+"items": [
+{
+"id": "planetName",
+"type": "TextBlock",
+"weight": "bolder",
+"size": "medium"
+}
+]
+},
+{
+"type": "Container",
+"id": "cardBody",
+"items": [
+{
+"id": "planetSummary",
+"type": "TextBlock",
+"wrap": true
+},
+{
+"id": "planetDetails",
+"type": "ColumnSet",
+"columns": [
+{
+"type": "Column",
+"width": "100",
+"items": [
+{
+"id": "planetImage",
+"size": "stretch",
+"type": "Image"
+}
+]
+},
+{
+"type": "Column",
+"width": "250",
+"items": [
+{
+"type": "FactSet",
+"facts": [
+{
+"id": "orderFromSun",
+"title": "Order from the sun:"
+},
+{
+"id": "planetNumSatellites",
+"title": "Known satellites:"
+},
+{
+"id": "solarOrbitYears",
+"title": "Solar orbit (*Earth years*):"
+},
+{
+"id": "solarOrbitAvgDistanceKm",
+"title": "Average distance from the sun (*km*):"
+}
+]
+}
+]
+}
+]
+},
+{
+"id": "imageAttribution",
+"type": "TextBlock",
+"size": "medium",
+"isSubtle": true,
+"wrap": true
+}
+]
+}
+],
+"actions": [
+{
+"type": "Action.OpenUrl",
+"title": "Learn more on Wikipedia"
+}
+]
+}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+1.  **Save** this file and close it.
+
+2.  Now, we will add a handler to process the message when the messaging
     extension's Adaptive Card is submitted. Open the file
     **C:\\Teams_Projects\\learn-msteams-bots\\src\\app\\planetBot\\planetBot.ts**.
 
-6.  Add the following content to the **PlanetBot** class.
+3.  Add the following content to the **PlanetBot** class.
 
-    protected handleTeamsMessagingExtensionSubmitAction(context: TurnContext,
-    action: MessagingExtensionAction):
-    Promise\<MessagingExtensionActionResponse\> {
-
-    switch (action.commandId) {
-
-    case "planetExpanderAction":
-
-    // load planets
-
-    const planets: any = require("./planets.json");
-
-    // get the selected planet
-
-    const selectedPlanet: any = planets.filter((planet) =\> planet.id ===
-    action.data.planetSelector)[0];
-
-    const adaptiveCard = this.getPlanetDetailCard(selectedPlanet);
-
-    // generate the response
-
-    return Promise.resolve({
-
-    composeExtension: {
-
-    type: "result",
-
-    attachmentLayout: "list",
-
-    attachments: [adaptiveCard]
-
-    }
-
-    } as MessagingExtensionActionResponse);
-
-    break;
-
-    default:
-
-    throw new Error("NotImplemented");
-
-    }
-
-    }
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+protected handleTeamsMessagingExtensionSubmitAction(context: TurnContext, action: MessagingExtensionAction): Promise<MessagingExtensionActionResponse> {
+switch (action.commandId) {
+case "planetExpanderAction":
+// load planets
+const planets: any = require("./planets.json");
+// get the selected planet
+const selectedPlanet: any = planets.filter((planet) => planet.id === action.data.planetSelector)[0];
+const adaptiveCard = this.getPlanetDetailCard(selectedPlanet);
+// generate the response
+return Promise.resolve({
+composeExtension: {
+type: "result",
+attachmentLayout: "list",
+attachments: [adaptiveCard]
+}
+} as MessagingExtensionActionResponse);
+break;
+default:
+throw new Error("NotImplemented");
+}
+}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The handleTeamsMessagingExtensionSubmitAction() method first retrieves the
 planet selected in the selector Adaptive Card from the in-memory planets data
@@ -1108,52 +769,30 @@ of the planet selected.
 
 1.  Add the utility method getPlanetDetailCard() to the PlanetBot class:
 
-    private getPlanetDetailCard(selectedPlanet: any):
-    MessagingExtensionAttachment {
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+private getPlanetDetailCard(selectedPlanet: any): MessagingExtensionAttachment {
+// load display card
+const adaptiveCardSource: any = require("./planetDisplayCard.json");
+// update planet fields in display card
+adaptiveCardSource.actions[0].url = selectedPlanet.wikiLink;
+find(adaptiveCardSource.body, { id: "cardHeader" }).items[0].text = selectedPlanet.name;
+const cardBody: any = find(adaptiveCardSource.body, { id: "cardBody" });
+find(cardBody.items, { id: "planetSummary" }).text = selectedPlanet.summary;
+find(cardBody.items, { id: "imageAttribution" }).text = "*Image attribution: " + selectedPlanet.imageAlt + "*";
+const cardDetails: any = find(cardBody.items, { id: "planetDetails" });
+cardDetails.columns[0].items[0].url = selectedPlanet.imageLink;
+find(cardDetails.columns[1].items[0].facts, { id: "orderFromSun" }).value = selectedPlanet.id;
+find(cardDetails.columns[1].items[0].facts, { id: "planetNumSatellites" }).value = selectedPlanet.numSatellites;
+find(cardDetails.columns[1].items[0].facts, { id: "solarOrbitYears" }).value = selectedPlanet.solarOrbitYears;
+find(cardDetails.columns[1].items[0].facts, { id: "solarOrbitAvgDistanceKm" }).value = Number(selectedPlanet.solarOrbitAvgDistanceKm).toLocaleString();
+// return the adaptive card
+return CardFactory.adaptiveCard(adaptiveCardSource);
+}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    // load display card
+1.  **Save** the file and close it.
 
-    const adaptiveCardSource: any = require("./planetDisplayCard.json");
-
-    // update planet fields in display card
-
-    adaptiveCardSource.actions[0].url = selectedPlanet.wikiLink;
-
-    find(adaptiveCardSource.body, { id: "cardHeader" }).items[0].text =
-    selectedPlanet.name;
-
-    const cardBody: any = find(adaptiveCardSource.body, { id: "cardBody" });
-
-    find(cardBody.items, { id: "planetSummary" }).text = selectedPlanet.summary;
-
-    find(cardBody.items, { id: "imageAttribution" }).text = "\*Image
-    attribution: " + selectedPlanet.imageAlt + "\*";
-
-    const cardDetails: any = find(cardBody.items, { id: "planetDetails" });
-
-    cardDetails.columns[0].items[0].url = selectedPlanet.imageLink;
-
-    find(cardDetails.columns[1].items[0].facts, { id: "orderFromSun" }).value =
-    selectedPlanet.id;
-
-    find(cardDetails.columns[1].items[0].facts, { id: "planetNumSatellites"
-    }).value = selectedPlanet.numSatellites;
-
-    find(cardDetails.columns[1].items[0].facts, { id: "solarOrbitYears" }).value
-    = selectedPlanet.solarOrbitYears;
-
-    find(cardDetails.columns[1].items[0].facts, { id: "solarOrbitAvgDistanceKm"
-    }).value = Number(selectedPlanet.solarOrbitAvgDistanceKm).toLocaleString();
-
-    // return the adaptive card
-
-    return CardFactory.adaptiveCard(adaptiveCardSource);
-
-    }
-
-2.  **Save** the file and close it.
-
-### **Task 5 – Test the conversation bot**
+### Task 5 – Test the conversation bot
 
 1.  On your **Command Prompt** window, ensure that you are in the
     **C:\\Teams_Projects\\learn-msteams-bots** directory.
@@ -1282,12 +921,12 @@ bot's messaging endpoint in the Azure portal.
 
 23. On **Terminate your batch job (Y/N)?**, enter **Y** and press enter key.
 
-## **Exercise 2 - Create search command messaging extensions**
+## Exercise 2 - Create search command messaging extensions
 
 In this exercise, you’ll learn how to execute a messaging extension search
 command from an existing message.
 
-### **Task 1 - Add a new search messaging extension to the Teams app**
+### Task 1 - Add a new search messaging extension to the Teams app
 
 1.  Open the file
     **C:\\Teams_Projects\\learn-msteams-bots\\src\\manifest\\manifest.json**.
@@ -1299,131 +938,80 @@ command from an existing message.
 3.  Next, locate the **composeExtensions.commands** array. Add the following
     object to the array to add the search extension:
 
-    {
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+{
+"id": "planetExpanderSearch",
+"type": "query",
+"title": "Planet Lookup",
+"description": "Search for a planet.",
+"context": ["compose"],
+"parameters": [{
+"name": "searchKeyword",
+"description": "Enter 'inner','outer' or the name of a specific planet",
+"title": "Planet"
+}]
+}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    "id": "planetExpanderSearch",
+1.  **Save** the file and close it.
 
-    "type": "query",
-
-    "title": "Planet Lookup",
-
-    "description": "Search for a planet.",
-
-    "context": ["compose"],
-
-    "parameters": [{
-
-    "name": "searchKeyword",
-
-    "description": "Enter 'inner','outer' or the name of a specific planet",
-
-    "title": "Planet"
-
-    }]
-
-    }
-
-4.  **Save** the file and close it.
-
-5.  The next step is to update the bot's code. Open the file
+2.  The next step is to update the bot's code. Open the file
     **C:\\Teams_Projects\\learn-msteams-bots\\src\\app\\planetBot\\planetBot.ts**.
 
-6.  Update the import statement for the **botbuilder** package to include the
+3.  Update the import statement for the **botbuilder** package to include the
     objects MessagingExtensionQuery and MessagingExtensionResponse:
 
-    import {
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+import {
+TeamsActivityHandler,
+TurnContext,
+MessageFactory,
+CardFactory, MessagingExtensionAction, MessagingExtensionActionResponse, MessagingExtensionAttachment,
+MessagingExtensionQuery, MessagingExtensionResponse
+} from "botbuilder";
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    TeamsActivityHandler,
+1.  Next, add the following method to the **PlanetBot** class:
 
-    TurnContext,
-
-    MessageFactory,
-
-    CardFactory, MessagingExtensionAction, MessagingExtensionActionResponse,
-    MessagingExtensionAttachment,
-
-    MessagingExtensionQuery, MessagingExtensionResponse
-
-    } from "botbuilder";
-
-7.  Next, add the following method to the **PlanetBot** class:
-
-    protected handleTeamsMessagingExtensionQuery(context: TurnContext, query:
-    MessagingExtensionQuery): Promise\<MessagingExtensionResponse\> {
-
-    // get the search query
-
-    let searchQuery = "";
-
-    if (query && query.parameters && query.parameters[0].name ===
-    "searchKeyword" && query.parameters[0].value) {
-
-    searchQuery = query.parameters[0].value.trim().toLowerCase();
-
-    }
-
-    // load planets
-
-    const planets: any = require("./planets.json");
-
-    // search results
-
-    let queryResults: string[] = [];
-
-    switch (searchQuery) {
-
-    case "inner":
-
-    // get all planets inside asteroid belt
-
-    queryResults = planets.filter((planet) =\> planet.id \<= 4);
-
-    break;
-
-    case "outer":
-
-    // get all planets outside asteroid belt
-
-    queryResults = planets.filter((planet) =\> planet.id \> 4);
-
-    break;
-
-    default:
-
-    // get the specified planet
-
-    queryResults.push(planets.filter((planet) =\> planet.name.toLowerCase() ===
-    searchQuery)[0]);
-
-    }
-
-    // get the results as cards
-
-    const searchResultsCards: MessagingExtensionAttachment[] = [];
-
-    queryResults.forEach((planet) =\> {
-
-    searchResultsCards.push(this.getPlanetResultCard(planet));
-
-    });
-
-    const response: MessagingExtensionResponse = {
-
-    composeExtension: {
-
-    type: "result",
-
-    attachmentLayout: "list",
-
-    attachments: searchResultsCards
-
-    }
-
-    } as MessagingExtensionResponse;
-
-    return Promise.resolve(response);
-
-    }
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+protected handleTeamsMessagingExtensionQuery(context: TurnContext, query: MessagingExtensionQuery): Promise<MessagingExtensionResponse> {
+// get the search query
+let searchQuery = "";
+if (query && query.parameters && query.parameters[0].name === "searchKeyword" && query.parameters[0].value) {
+searchQuery = query.parameters[0].value.trim().toLowerCase();
+}
+// load planets
+const planets: any = require("./planets.json");
+// search results
+let queryResults: string[] = [];
+switch (searchQuery) {
+case "inner":
+// get all planets inside asteroid belt
+queryResults = planets.filter((planet) => planet.id <= 4);
+break;
+case "outer":
+// get all planets outside asteroid belt
+queryResults = planets.filter((planet) => planet.id > 4);
+break;
+default:
+// get the specified planet
+queryResults.push(planets.filter((planet) => planet.name.toLowerCase() === searchQuery)[0]);
+}
+// get the results as cards
+const searchResultsCards: MessagingExtensionAttachment[] = [];
+queryResults.forEach((planet) => {
+searchResultsCards.push(this.getPlanetResultCard(planet));
+});
+const response: MessagingExtensionResponse = {
+composeExtension: {
+type: "result",
+attachmentLayout: "list",
+attachments: searchResultsCards
+}
+} as MessagingExtensionResponse;
+return Promise.resolve(response);
+}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This method will first get the search keyword from the query sent to the bot
 from Microsoft Teams. It then will retrieve planets based on three different
@@ -1444,16 +1032,15 @@ Microsoft Teams.
 1.  Add the following utility method to the **PlanetBot** class to create the
     card for each search result:
 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 private getPlanetResultCard(selectedPlanet: any): MessagingExtensionAttachment {
-
-return CardFactory.heroCard(selectedPlanet.name, selectedPlanet.summary,
-[selectedPlanet.imageLink]);
-
+return CardFactory.heroCard(selectedPlanet.name, selectedPlanet.summary, [selectedPlanet.imageLink]);
 }
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 1.  **Save** this file and close it.
 
-### **Task 2 - Test the updated messaging extension**
+### Task 2 - Test the updated messaging extension
 
 1.  On your **Command Prompt** window, ensure that you are in
     **C:\\Teams_Projects\\learn-msteams-bots** directory. Run the following
@@ -1500,12 +1087,12 @@ return CardFactory.heroCard(selectedPlanet.name, selectedPlanet.summary,
 
 11. On **Terminate your batch job (Y/N)?**, enter **Y** and press enter key.
 
-## **Exercise 3 - Implement link unfurling messaging extensions**
+## Exercise 3 - Implement link unfurling messaging extensions
 
 In this exercise, you’ll learn how to add link unfurling to your Microsoft Teams
 app and how to implement this type of messaging extension.
 
-### **Task 1 - Add a new search messaging extension to the Teams app**
+### Task 1 - Add a new search messaging extension to the Teams app
 
 In this section, you'll add a search messaging extension to find a specific
 planet.
@@ -1522,87 +1109,60 @@ planet.
         property after the **commands** property to add the link unfurling
         messaging extension:
 
-        "messageHandlers": [
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+"messageHandlers": [
+{
+"type": "link",
+"value": {
+"domains": [
+"*.wikipedia.org"
+]
+}
+}
+]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-        {
+1.  Next, locate the **validDomains** property. Add the following domain to the
+    array of valid domains: **"\*.wikipedia.org"**
 
-        "type": "link",
+    1.  **Save** this file and close it.
 
-        "value": {
-
-        "domains": [
-
-        "\*.wikipedia.org"
-
-        ]
-
-        }
-
-        }
-
-        ]
-
-    3.  Next, locate the **validDomains** property. Add the following domain to
-        the array of valid domains: **"\*.wikipedia.org"**
-
-    4.  **Save** this file and close it.
-
-    5.  The next step is to update the bot's code. Open the file
+    2.  The next step is to update the bot's code. Open the file
         **C:\\Teams_Projects\\learn-msteams-bots\\src\\app\\planetBot\\planetBot.ts**.
 
-    6.  Update the import statement for the **botbuilder** package to include
+    3.  Update the import statement for the **botbuilder** package to include
         the object AppBasedLinkQuery:
 
-        import {
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+import {
+TeamsActivityHandler,
+TurnContext,
+MessageFactory,
+CardFactory, MessagingExtensionAction, MessagingExtensionActionResponse, MessagingExtensionAttachment,
+MessagingExtensionQuery, MessagingExtensionResponse,
+AppBasedLinkQuery
+} from "botbuilder";
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-        TeamsActivityHandler,
+1.  Add the following method to the **PlanetBot** class:
 
-        TurnContext,
-
-        MessageFactory,
-
-        CardFactory, MessagingExtensionAction, MessagingExtensionActionResponse,
-        MessagingExtensionAttachment,
-
-        MessagingExtensionQuery, MessagingExtensionResponse,
-
-        AppBasedLinkQuery
-
-        } from "botbuilder";
-
-    7.  Add the following method to the **PlanetBot** class:
-
-        protected handleTeamsAppBasedLinkQuery(context: TurnContext, query:
-        AppBasedLinkQuery): Promise\<MessagingExtensionResponse\> {
-
-        // load planets
-
-        const planets: any = require("./planets.json");
-
-        // get the selected planet
-
-        const selectedPlanet: any = planets.filter((planet) =\> planet.wikiLink
-        === query.url)[0];
-
-        const adaptiveCard = this.getPlanetDetailCard(selectedPlanet);
-
-        // generate the response
-
-        return Promise.resolve({
-
-        composeExtension: {
-
-        type: "result",
-
-        attachmentLayout: "list",
-
-        attachments: [adaptiveCard]
-
-        }
-
-        } as MessagingExtensionActionResponse);
-
-        }
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+protected handleTeamsAppBasedLinkQuery(context: TurnContext, query: AppBasedLinkQuery): Promise<MessagingExtensionResponse> {
+// load planets
+const planets: any = require("./planets.json");
+// get the selected planet
+const selectedPlanet: any = planets.filter((planet) => planet.wikiLink === query.url)[0];
+const adaptiveCard = this.getPlanetDetailCard(selectedPlanet);
+// generate the response
+return Promise.resolve({
+composeExtension: {
+type: "result",
+attachmentLayout: "list",
+attachments: [adaptiveCard]
+}
+} as MessagingExtensionActionResponse);
+}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This method is called by the Bot Framework when a URL matching the domain listed
 in the app's manifest. It will find a planet with the matching URL and return a
@@ -1611,7 +1171,7 @@ the URL to the existing message.
 
 1.  **Save** this file and close it.
 
-### **Task 2 - Test the updated messaging extension**
+### Task 2 - Test the updated messaging extension
 
 1.  On your **Command Prompt** window, ensure that you are in
     **C:\\Teams_Projects\\learn-msteams-bots** directory. Run the following

@@ -3,7 +3,7 @@
 In this exercise, you’ll learn how to create and add a new bot to a Microsoft
 Teams app and interact with it from the Microsoft Teams client.
 
-### **Task 1 - Register a new bot** 
+### Task 1 - Register a new bot
 
 1.  Open a new browser tab and navigate to the following URL:
 
@@ -111,7 +111,7 @@ Teams app and interact with it from the Microsoft Teams client.
 
 11. Copy the value of the secret to a notepad, as you'll need it later.
 
-### **Task 2 – Create Microsoft Teams App**
+### Task 2 – Create Microsoft Teams App
 
 1.  Open **Command Prompt**.
 
@@ -176,7 +176,7 @@ Teams app and interact with it from the Microsoft Teams client.
 
     **Do you want to include bot calling support?** No
 
-### **Task 3 - Update the default bot**
+### Task 3 - Update the default bot
 
 The first version of this bot will respond to the message **MentionMe** in a 1:1
 chat conversation. The response will mention the user who started the
@@ -187,77 +187,60 @@ conversation.
 
 2.  Add the following method to the **ConversationalBot** class:
 
-    private async handleMessageMentionMeOneOnOne(context: TurnContext):
-    Promise\<void\> {
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+private async handleMessageMentionMeOneOnOne(context: TurnContext): Promise<void> {
+const mention = {
+mentioned: context.activity.from,
+text: `<at>${new TextEncoder().encode(context.activity.from.name)}</at>`,
+type: "mention"
+};
+const replyActivity = MessageFactory.text(`Hi ${mention.text} from a 1:1 chat.`);
+replyActivity.entities = [mention];
+await context.sendActivity(replyActivity);
+}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    const mention = {
-
-    mentioned: context.activity.from,
-
-    text: \`\<at\>\${new
-    TextEncoder().encode(context.activity.from.name)}\</at\>\`,
-
-    type: "mention"
-
-    };
-
-    const replyActivity = MessageFactory.text(\`Hi \${mention.text} from a 1:1
-    chat.\`);
-
-    replyActivity.entities = [mention];
-
-    await context.sendActivity(replyActivity);
-
-    }
-
-3.  The method handler you added contains a reference to two objects you haven't
+1.  The method handler you added contains a reference to two objects you haven't
     imported into the bot file. Add the following code after the existing import
     statements at the top of the file to import the TextEncoder object:
 
-    import \* as Util from "util";
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+import * as Util from "util";
+const TextEncoder = Util.TextEncoder;
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    const TextEncoder = Util.TextEncoder;
-
-4.  Add a reference to the MessageFactory object, by adding it to the existing
+1.  Add a reference to the MessageFactory object, by adding it to the existing
     list of object references in the **botbuilder** package import at the top of
     the file:
 
-    import {
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+import {
+StatePropertyAccessor,
+CardFactory,
+TurnContext,
+MemoryStorage,
+ConversationState,
+ActivityTypes,
+TeamsActivityHandler,
+MessageFactory
+} from 'botbuilder';
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    StatePropertyAccessor,
+1.  Locate the handler onMessage() within the constructor().
 
-    CardFactory,
-
-    TurnContext,
-
-    MemoryStorage,
-
-    ConversationState,
-
-    ActivityTypes,
-
-    TeamsActivityHandler,
-
-    MessageFactory
-
-    } from 'botbuilder';
-
-5.  Locate the handler onMessage() within the constructor().
-
-6.  Locate and replace the line if (text.startsWith("hello")) { in the
+2.  Locate and replace the line if (text.startsWith("hello")) { in the
     onMessage() handler with the following code:
 
-    if (text.startsWith("mentionme")) {
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+if (text.startsWith("mentionme")) {
+await this.handleMessageMentionMeOneOnOne(context);
+return;
+} else if (text.startsWith("hello")) {
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    await this.handleMessageMentionMeOneOnOne(context);
+1.  **Save** the file and close it.
 
-    return;
-
-    } else if (text.startsWith("hello")) {
-
-7.  **Save** the file and close it.
-
-### **Task 4 - Update the project's environment variables**
+### Task 4 - Update the project's environment variables
 
 The project contains a file used during development to set environment variables
 to store secure values, such as the Azure AD application's ID and secret that
@@ -270,15 +253,15 @@ work:
     **Application Id** and secret **Value** properties that you obtained when
     registering the bot:
 
-    \# App Id and App Password fir the Bot Framework bot
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# App Id and App Password fir the Bot Framework bot
+MICROSOFT_APP_ID=
+MICROSOFT_APP_PASSWORD=
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    MICROSOFT_APP_ID=
+1.  **Save** the file and close it.
 
-    MICROSOFT_APP_PASSWORD=
-
-3.  **Save** the file and close it.
-
-### **Task 5 - Register the bot in the Microsoft Teams app**
+### Task 5 - Register the bot in the Microsoft Teams app
 
 The last step before you can test bot is to add it to the Microsoft Teams app
 manifest. You can use App Studio to do this.
@@ -319,76 +302,56 @@ manifest. You can use App Studio to do this.
 
 3.  On the **New command** dialog, enter the following values:
 
--   **Command text**: MentionMe
+    -   **Command text**: MentionMe
 
--   **Help text**: Sends message with @mention of the sender
+    -   **Help text**: Sends message with @mention of the sender
 
--   **Scope**: Personal
+    -   **Scope**: Personal
 
-1.  Click **Save**
+4.  Click **Save**
 
-2.  With the bot added to the Teams app, you need to update the manifest in your
+5.  With the bot added to the Teams app, you need to update the manifest in your
     project. From the **(3) Finish** \> **Test and distribute** section, select
     the **Download** button from the **Download** section.
 
-3.  This will download the app package as a ZIP. Unpack the zip and open the
+6.  This will download the app package as a ZIP. Unpack the zip and open the
     **manifest.json** file in it.
 
-4.  In the
+7.  In the
     **C:\\Teams_Projects\\learn-msteams-bots2\\src\\manifest\\manifest.json**
     file, locate the property id. Change its value to match the GUID of the
     Azure AD app that was created when creating the bot in the Azure portal.
 
-5.  Update the **bots** section to include the **commands** for **MentionMe**.
+8.  Update the **bots** section to include the **commands** for **MentionMe**.
     You can get this from **manifest.json** file that you extracted in step 12.
 
-    "bots": [
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+"bots": [
+{
+"botId": "{{MICROSOFT_APP_ID}}",
+"supportsFiles": false,
+"isNotificationOnly": false,
+"scopes": [ "team", "personal" ],
+"commandLists": [
+{
+"scopes": [ "team", "personal" ],
+"commands": [
+{
+"title": "Help",
+"description": "Shows help information"
+},
+{
+"title": "MentionMe",
+"description": "Sends message with @mention of the sender"
+}
+]
+}
+]
+}
+],
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    {
-
-    "botId": "{{MICROSOFT_APP_ID}}",
-
-    "supportsFiles": false,
-
-    "isNotificationOnly": false,
-
-    "scopes": [ "team", "personal" ],
-
-    "commandLists": [
-
-    {
-
-    "scopes": [ "team", "personal" ],
-
-    "commands": [
-
-    {
-
-    "title": "Help",
-
-    "description": "Shows help information"
-
-    },
-
-    {
-
-    "title": "MentionMe",
-
-    "description": "Sends message with @mention of the sender"
-
-    }
-
-    ]
-
-    }
-
-    ]
-
-    }
-
-    ],
-
-6.  **Save** this file and close it.
+1.  **Save** this file and close it.
 
 **Important**
 
@@ -397,7 +360,7 @@ the **./.env** file when you build the project.
 
 At this point, your bot is ready to test!
 
-### **Task 6 - Test the conversation bot**
+### Task 6 - Test the conversation bot
 
 1.  On your **Command Prompt** window, ensure that you are in the
     **C:\\Teams_Projects\\learn-msteams-bots2** directory.
@@ -482,7 +445,7 @@ bot's messaging endpoint in the Azure portal.
 
     ![](media/1611c19245643eef9b4e17e1d4d7548a.png)
 
-13. It will show some details about the **Conversational Bot***.*
+13. It will show some details about the **Conversational Bot**\*.\*
 
     ![](media/2d759b78884ceea09563245818efda64.png)
 
@@ -506,7 +469,7 @@ bot's messaging endpoint in the Azure portal.
 
 19. For **Terminate batch job (Y/N)?**, enter **Y** and press enter key.
 
-## **Exercise 2 - Bots in Microsoft Teams channels and group chats**
+## Exercise 2 - Bots in Microsoft Teams channels and group chats
 
 Conversation bots can do many things within the Microsoft Teams client. They can
 proactively send a message to a channel or group chat, listen for and act on
@@ -515,7 +478,7 @@ Microsoft Teams specific events and even update their own messages.
 In this exercise, you’ll modify the existing Microsoft Teams app to update your
 bot to respond to message reactions, and update or delete messages capabilities.
 
-### **Task 1 - Add channel support to a conversation bot**
+### Task 1 - Add channel support to a conversation bot
 
 1.  Open the file
     **C:\\Teams_Projects\\learn-msteams-bots2\\src\\manifest\\manifest.json**.
@@ -532,83 +495,56 @@ bot to respond to message reactions, and update or delete messages capabilities.
         the contents of the if statement to check the type of conversation the
         message was sent from to call the corresponding handler.
 
-        if (context.activity.conversation.conversationType == "personal") {
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+if (context.activity.conversation.conversationType == "personal") {
+await this.handleMessageMentionMeOneOnOne(context);
+} else {
+await this.handleMessageMentionMeChannelConversation(context);
+}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-        await this.handleMessageMentionMeOneOnOne(context);
+1.  The complete if statement in the **onMessage()** handler should now look
+    like the following:
 
-        } else {
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+if (text.startsWith("mentionme")) {
+if (context.activity.conversation.conversationType == "personal") {
+await this.handleMessageMentionMeOneOnOne(context);
+} else {
+await this.handleMessageMentionMeChannelConversation(context);
+}
+return;
+} else if (text.startsWith("hello")) {
+await context.sendActivity("Oh, hello to you as well!");
+return;
+} else if (text.startsWith("help")) {
+const dc = await this.dialogs.createContext(context);
+await dc.beginDialog("help");
+} else {
+await context.sendActivity(`I\'m terribly sorry, but my developer hasn\'t trained me to do anything yet...`);
+}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-        await this.handleMessageMentionMeChannelConversation(context);
+1.  Finally, add the following method to the **ConversationalBot** class to
+    implement the handler for our new scenario:
 
-        }
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+private async handleMessageMentionMeChannelConversation(context: TurnContext): Promise<void> {
+const mention = {
+mentioned: context.activity.from,
+text: `<at>${new TextEncoder().encode(context.activity.from.name)}</at>`,
+type: "mention"
+};
+const replyActivity = MessageFactory.text(`Hi ${mention.text}!`);
+replyActivity.entities = [mention];
+const followupActivity = MessageFactory.text(`*We are in a channel conversation*`);
+await context.sendActivities([replyActivity, followupActivity]);
+}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    5.  The complete if statement in the **onMessage()** handler should now look
-        like the following:
+1.  **Save** the file and close it.
 
-        if (text.startsWith("mentionme")) {
-
-        if (context.activity.conversation.conversationType == "personal") {
-
-        await this.handleMessageMentionMeOneOnOne(context);
-
-        } else {
-
-        await this.handleMessageMentionMeChannelConversation(context);
-
-        }
-
-        return;
-
-        } else if (text.startsWith("hello")) {
-
-        await context.sendActivity("Oh, hello to you as well!");
-
-        return;
-
-        } else if (text.startsWith("help")) {
-
-        const dc = await this.dialogs.createContext(context);
-
-        await dc.beginDialog("help");
-
-        } else {
-
-        await context.sendActivity(\`I\\'m terribly sorry, but my developer
-        hasn\\'t trained me to do anything yet...\`);
-
-        }
-
-    6.  Finally, add the following method to the **ConversationalBot** class to
-        implement the handler for our new scenario:
-
-        private async handleMessageMentionMeChannelConversation(context:
-        TurnContext): Promise\<void\> {
-
-        const mention = {
-
-        mentioned: context.activity.from,
-
-        text: \`\<at\>\${new
-        TextEncoder().encode(context.activity.from.name)}\</at\>\`,
-
-        type: "mention"
-
-        };
-
-        const replyActivity = MessageFactory.text(\`Hi \${mention.text}!\`);
-
-        replyActivity.entities = [mention];
-
-        const followupActivity = MessageFactory.text(\`\*We are in a channel
-        conversation\*\`);
-
-        await context.sendActivities([replyActivity, followupActivity]);
-
-        }
-
-    7.  **Save** the file and close it.
-
-### **Task 2 - Test the conversation bot in a channel**
+### Task 2 - Test the conversation bot in a channel
 
 1.  On **Command Prompt**, ensure that you are in
     **C:\\Teams_Projects\\learn-msteams-bots2** directory.
@@ -662,7 +598,7 @@ testing it.
 
     ![](media/12183d5d02032d26938e0c60fb55ab31.png)
 
-### **Task 3 - Reply to messages with Adaptive cards**
+### Task 3 - Reply to messages with Adaptive cards
 
 In this section, you'll update the bot to respond to unknown messages using an
 Adaptive card. The card's single action will trigger the bot to update the
@@ -677,123 +613,71 @@ additional action that will trigger the bot to delete the message.
     existing if statement to respond with an adaptive card if the bot receives
     an unknown command:
 
-    const value = { cardAction: "update", count: 0 };
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+const value = { cardAction: "update", count: 0 };
+const card = CardFactory.adaptiveCard({
+"$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+"type": "AdaptiveCard",
+"version": "1.0",
+"body": [
+{
+"type": "Container",
+"items": [
+{
+"type": "TextBlock",
+"text": "Adaptive card response",
+"weight": "bolder",
+"size": "large"
+}
+]
+},
+{
+"type": "Container",
+"items": [
+{
+"type": "TextBlock",
+"text": "Demonstrates how to respond with a card, update the card & ultimately delete the response.",
+"wrap": true
+}
+]
+}
+],
+"actions": [
+{
+"type": "Action.Submit",
+"title": "Update card",
+"data": value
+}
+]
+});
+await context.sendActivity({ attachments: [card] });
+return;
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    const card = CardFactory.adaptiveCard({
-
-    "\$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
-
-    "type": "AdaptiveCard",
-
-    "version": "1.0",
-
-    "body": [
-
-    {
-
-    "type": "Container",
-
-    "items": [
-
-    {
-
-    "type": "TextBlock",
-
-    "text": "Adaptive card response",
-
-    "weight": "bolder",
-
-    "size": "large"
-
-    }
-
-    ]
-
-    },
-
-    {
-
-    "type": "Container",
-
-    "items": [
-
-    {
-
-    "type": "TextBlock",
-
-    "text": "Demonstrates how to respond with a card, update the card &
-    ultimately delete the response.",
-
-    "wrap": true
-
-    }
-
-    ]
-
-    }
-
-    ],
-
-    "actions": [
-
-    {
-
-    "type": "Action.Submit",
-
-    "title": "Update card",
-
-    "data": value
-
-    }
-
-    ]
-
-    });
-
-    await context.sendActivity({ attachments: [card] });
-
-    return;
-
-3.  The **onMessage()** handler's if statement should now look similar to the
+1.  The **onMessage()** handler's if statement should now look similar to the
     following:
 
-    if (text.startsWith("mentionme")) {
-
-    if (context.activity.conversation.conversationType == "personal") {
-
-    await this.handleMessageMentionMeOneOnOne(context);
-
-    } else {
-
-    await this.handleMessageMentionMeChannelConversation(context);
-
-    }
-
-    return;
-
-    } else if (text.startsWith("hello")) {
-
-    await context.sendActivity("Oh, hello to you as well!");
-
-    return;
-
-    } else if (text.startsWith("help")) {
-
-    const dc = await this.dialogs.createContext(context);
-
-    await dc.beginDialog("help");
-
-    } else {
-
-    const value = { cardAction: "update", count: 0 };
-
-    const card = CardFactory.adaptiveCard({..});
-
-    await context.sendActivity({ attachments: [card] });
-
-    return;
-
-    });
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+if (text.startsWith("mentionme")) {
+if (context.activity.conversation.conversationType == "personal") {
+await this.handleMessageMentionMeOneOnOne(context);
+} else {
+await this.handleMessageMentionMeChannelConversation(context);
+}
+return;
+} else if (text.startsWith("hello")) {
+await context.sendActivity("Oh, hello to you as well!");
+return;
+} else if (text.startsWith("help")) {
+const dc = await this.dialogs.createContext(context);
+await dc.beginDialog("help");
+} else {
+const value = { cardAction: "update", count: 0 };
+const card = CardFactory.adaptiveCard({..});
+await context.sendActivity({ attachments: [card] });
+return;
+});
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Notice the else statement will send a card to the conversation that contains a
 data object in the single actions. This object has a count property & cardAction
@@ -802,106 +686,58 @@ property. When a user triggers the action, this object will be sent to the bot.
 1.  Add the following methods to implement the updateCardActivity() & the
     deleteCardActivity() handlers:
 
-    private async updateCardActivity(context): Promise\<void\> {
-
-    const value = {
-
-    cardAction: "update",
-
-    count: context.activity.value.count + 1
-
-    };
-
-    const card = CardFactory.adaptiveCard({
-
-    "\$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
-
-    "type": "AdaptiveCard",
-
-    "version": "1.0",
-
-    "body": [
-
-    {
-
-    "type": "Container",
-
-    "items": [
-
-    {
-
-    "type": "TextBlock",
-
-    "text": "Adaptive card response",
-
-    "weight": "bolder",
-
-    "size": "large"
-
-    }
-
-    ]
-
-    },
-
-    {
-
-    "type": "Container",
-
-    "items": [
-
-    {
-
-    "type": "TextBlock",
-
-    "text": \`Updated count: \${ value.count }\`,
-
-    "wrap": true
-
-    }
-
-    ]
-
-    }
-
-    ],
-
-    "actions": [
-
-    {
-
-    "type": "Action.Submit",
-
-    "title": "Update card",
-
-    "data": value
-
-    },
-
-    {
-
-    "type": "Action.Submit",
-
-    "title": "Delete card",
-
-    "data": { cardAction: "delete"}
-
-    }
-
-    ]
-
-    });
-
-    await context.updateActivity({ attachments: [card], id:
-    context.activity.replyToId, type: 'message' });
-
-    }
-
-    private async deleteCardActivity(context): Promise\<void\> {
-
-    await context.deleteActivity(context.activity.replyToId);
-
-    }
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+private async updateCardActivity(context): Promise<void> {
+const value = {
+cardAction: "update",
+count: context.activity.value.count + 1
+};
+const card = CardFactory.adaptiveCard({
+"$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+"type": "AdaptiveCard",
+"version": "1.0",
+"body": [
+{
+"type": "Container",
+"items": [
+{
+"type": "TextBlock",
+"text": "Adaptive card response",
+"weight": "bolder",
+"size": "large"
+}
+]
+},
+{
+"type": "Container",
+"items": [
+{
+"type": "TextBlock",
+"text": `Updated count: ${ value.count }`,
+"wrap": true
+}
+]
+}
+],
+"actions": [
+{
+"type": "Action.Submit",
+"title": "Update card",
+"data": value
+},
+{
+"type": "Action.Submit",
+"title": "Delete card",
+"data": { cardAction: "delete"}
+}
+]
+});
+await context.updateActivity({ attachments: [card], id: context.activity.replyToId, type: 'message' });
+}
+private async deleteCardActivity(context): Promise<void> {
+await context.deleteActivity(context.activity.replyToId);
+}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 In the code you've added, notice the updateCardActivity() retrieves and
 increments the count property it received. It then creates a new card with the
@@ -912,163 +748,108 @@ The deleteCardActivity() deletes the card using the deleteActivity() method.
 
 1.  Within the **onMessage()** method, locate the following line of code:
 
-    case ActivityTypes.Message:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+case ActivityTypes.Message:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-2.  You're going to add a conditional check to determine if the message is an
+1.  You're going to add a conditional check to determine if the message is an
     action from our card or a message from the user. First, wrap the entire
     contents of this **case** statement in the else part of a new **if-else**
     block:
 
-    case ActivityTypes.Message:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+case ActivityTypes.Message:
+// if a value property exists = adaptive card submit action
+if () {
+// TODO - insert card action logic
+} else {
+// existing code goes here
+}
+break;
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    // if a value property exists = adaptive card submit action
-
-    if () {
-
-    // TODO - insert card action logic
-
-    } else {
-
-    // existing code goes here
-
-    }
-
-    break;
-
-3.  Next, update the if statement to check if the message contains a **value**
+1.  Next, update the if statement to check if the message contains a **value**
     property:
 
-    case ActivityTypes.Message:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+case ActivityTypes.Message:
+// if a value property exists = adaptive card submit action
+if (context.activity.value) {
+// TODO - insert card action logic
+} else {
+// existing code goes here
+}
+break;
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    // if a value property exists = adaptive card submit action
-
-    if (context.activity.value) {
-
-    // TODO - insert card action logic
-
-    } else {
-
-    // existing code goes here
-
-    }
-
-    break;
-
-4.  Finally, add the following switch statement to the if block, replacing the
+1.  Finally, add the following switch statement to the if block, replacing the
     **// TODO - insert card action logic** comment, to determine if the action
     requested should update or delete the card:
 
-    switch (context.activity.value.cardAction) {
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+switch (context.activity.value.cardAction) {
+case "update":
+await this.updateCardActivity(context);
+break;
+case "delete":
+await this.deleteCardActivity(context);
+break;
+}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    case "update":
+1.  The final **onMessage()** method should look like the following code:
 
-    await this.updateCardActivity(context);
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+this.onMessage(async (context: TurnContext): Promise<void> => {
+switch (context.activity.type) {
+case ActivityTypes.Message:
+// if a value property exists = adaptive card submit action
+if (context.activity.value) {
+switch (context.activity.value.cardAction) {
+case "update":
+await this.updateCardActivity(context);
+break;
+case "delete":
+await this.deleteCardActivity(context);
+break;
+}
+} else {
+let text = TurnContext.removeRecipientMention(context.activity);
+text = text.toLowerCase();
+if (text.startsWith("mentionme")) {
+if (context.activity.conversation.conversationType == "personal") {
+await this.handleMessageMentionMeOneOnOne(context);
+} else {
+await this.handleMessageMentionMeChannelConversation(context);
+}
+return;
+} else if (text.startsWith("hello")) {
+await context.sendActivity("Oh, hello to you as well!");
+return;
+} else if (text.startsWith("help")) {
+const dc = await this.dialogs.createContext(context);
+await dc.beginDialog("help");
+} else {
+const value = { cardAction: "update", count: 0 };
+const card = CardFactory.adaptiveCard({
+// code omitted for brevity
+});
+await context.sendActivity({ attachments: [card] });
+return;
+}
+break;
+}
+default:
+break;
+}
+// Save state changes
+return this.conversationState.saveChanges(context);
+});
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    break;
+1.  **Save** this file.
 
-    case "delete":
-
-    await this.deleteCardActivity(context);
-
-    break;
-
-    }
-
-5.  The final **onMessage()** method should look like the following code:
-
-    this.onMessage(async (context: TurnContext): Promise\<void\> =\> {
-
-    switch (context.activity.type) {
-
-    case ActivityTypes.Message:
-
-    // if a value property exists = adaptive card submit action
-
-    if (context.activity.value) {
-
-    switch (context.activity.value.cardAction) {
-
-    case "update":
-
-    await this.updateCardActivity(context);
-
-    break;
-
-    case "delete":
-
-    await this.deleteCardActivity(context);
-
-    break;
-
-    }
-
-    } else {
-
-    let text = TurnContext.removeRecipientMention(context.activity);
-
-    text = text.toLowerCase();
-
-    if (text.startsWith("mentionme")) {
-
-    if (context.activity.conversation.conversationType == "personal") {
-
-    await this.handleMessageMentionMeOneOnOne(context);
-
-    } else {
-
-    await this.handleMessageMentionMeChannelConversation(context);
-
-    }
-
-    return;
-
-    } else if (text.startsWith("hello")) {
-
-    await context.sendActivity("Oh, hello to you as well!");
-
-    return;
-
-    } else if (text.startsWith("help")) {
-
-    const dc = await this.dialogs.createContext(context);
-
-    await dc.beginDialog("help");
-
-    } else {
-
-    const value = { cardAction: "update", count: 0 };
-
-    const card = CardFactory.adaptiveCard({
-
-    // code omitted for brevity
-
-    });
-
-    await context.sendActivity({ attachments: [card] });
-
-    return;
-
-    }
-
-    break;
-
-    }
-
-    default:
-
-    break;
-
-    }
-
-    // Save state changes
-
-    return this.conversationState.saveChanges(context);
-
-    });
-
-6.  **Save** this file.
-
-### **Task 4 - Test the bot updating existing messages**
+### Task 4 - Test the bot updating existing messages
 
 1.  In the Microsoft Teams client, go to the channel you installed the bot in
     the previous section. Click **New Conversation** and @mention the bot with a
@@ -1088,7 +869,7 @@ The deleteCardActivity() deletes the card using the deleteActivity() method.
 4.  Finally, select the **Delete card** button. After a few seconds, the card
     will be removed by the bot.
 
-### **Task 5 - Reply to message reactions**
+### Task 5 - Reply to message reactions
 
 In this section, you'll update the bot to respond when someone likes a message
 from the bot.
@@ -1099,26 +880,22 @@ from the bot.
 2.  Locate the existing this.onMessageReaction() handler in the class
     constructor method and replace its contents with the following code:
 
-    if (context.activity.reactionsAdded) {
-
-    context.activity.reactionsAdded.forEach(async (reaction) =\> {
-
-    if (reaction.type === "like") {
-
-    await context.sendActivity("Thank you!");
-
-    }
-
-    });
-
-    }
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+if (context.activity.reactionsAdded) {
+context.activity.reactionsAdded.forEach(async (reaction) => {
+if (reaction.type === "like") {
+await context.sendActivity("Thank you!");
+}
+});
+}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This code will execute when a user adds a reaction to a message from the bot. If
 the reaction is a *like*, the bot will reply with a *"Thank you!"* message.
 
 1.  **Save** this file.
 
-### **Task 6 - Test the bot reacting to message reactions**
+### Task 6 - Test the bot reacting to message reactions
 
 1.  On **Command Prompt**, ensure that you are in
     **C:\\Teams_Projects\\learn-msteams-bots2** directory.
@@ -1139,12 +916,12 @@ testing it.
 
     ![](media/d52e93c8c7ce6d7713abd98494bd5db1.png)
 
-## **Exercise 3 - Proactive messages from bots**
+## Exercise 3 - Proactive messages from bots
 
 In this exercise, you’ll update the existing Teams app to send a proactive
 message from your bot.
 
-### **Task 1 - Start a proactive message from the bot**
+### Task 1 - Start a proactive message from the bot
 
 1.  Open the file
     **C:\\Teams_Projects\\learn-msteams-bots2\\src\\app\\conversationalBot\\ConversationalBot.ts**.
@@ -1152,168 +929,108 @@ message from your bot.
 2.  Add the following objects to the existing import {...} from "botbuilder";
     statement you'll need:
 
-    import {
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+import {
+ChannelInfo,
+TeamsChannelData,
+ConversationParameters,
+teamsGetChannelId,
+Activity,
+BotFrameworkAdapter,
+ConversationReference,
+ConversationResourceResponse,
+// existing imports omitted for clarity
+} from "botbuilder";
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    ChannelInfo,
-
-    TeamsChannelData,
-
-    ConversationParameters,
-
-    teamsGetChannelId,
-
-    Activity,
-
-    BotFrameworkAdapter,
-
-    ConversationReference,
-
-    ConversationResourceResponse,
-
-    // existing imports omitted for clarity
-
-    } from "botbuilder";
-
-3.  Locate the card in the **else** statement in the **onMessage()** handler you
+1.  Locate the card in the **else** statement in the **onMessage()** handler you
     added in the previous section. Add a second action button to the card that
     will trigger the creation of a new message:
 
-    {
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+{
+"type": "Action.Submit",
+"title": "Create new thread in this channel",
+"data": { cardAction: "newconversation" }
+}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    "type": "Action.Submit",
+1.  The card should now look like the following:
 
-    "title": "Create new thread in this channel",
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+const card = CardFactory.adaptiveCard({
+"$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+"type": "AdaptiveCard",
+"version": "1.0",
+"body": [
+{
+"type": "Container",
+"items": [
+{
+"type": "TextBlock",
+"text": "Adaptive card response",
+"weight": "bolder",
+"size": "large"
+}
+]
+},
+{
+"type": "Container",
+"items": [
+{
+"type": "TextBlock",
+"text": "Demonstrates how to respond with a card, update the card & ultimately delete the response.",
+"wrap": true
+}
+]
+}
+],
+"actions": [
+{
+"type": "Action.Submit",
+"title": "Update card",
+"data": value
+},
+{
+"type": "Action.Submit",
+"title": "Create new thread in this channel",
+"data": { cardAction: "newconversation" }
+}
+]
+});
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    "data": { cardAction: "newconversation" }
-
-    }
-
-4.  The card should now look like the following:
-
-    const card = CardFactory.adaptiveCard({
-
-    "\$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
-
-    "type": "AdaptiveCard",
-
-    "version": "1.0",
-
-    "body": [
-
-    {
-
-    "type": "Container",
-
-    "items": [
-
-    {
-
-    "type": "TextBlock",
-
-    "text": "Adaptive card response",
-
-    "weight": "bolder",
-
-    "size": "large"
-
-    }
-
-    ]
-
-    },
-
-    {
-
-    "type": "Container",
-
-    "items": [
-
-    {
-
-    "type": "TextBlock",
-
-    "text": "Demonstrates how to respond with a card, update the card &
-    ultimately delete the response.",
-
-    "wrap": true
-
-    }
-
-    ]
-
-    }
-
-    ],
-
-    "actions": [
-
-    {
-
-    "type": "Action.Submit",
-
-    "title": "Update card",
-
-    "data": value
-
-    },
-
-    {
-
-    "type": "Action.Submit",
-
-    "title": "Create new thread in this channel",
-
-    "data": { cardAction: "newconversation" }
-
-    }
-
-    ]
-
-    });
-
-5.  Next, add another case statement to the switch
+1.  Next, add another case statement to the switch
     (context.activity.value.cardAction) statement the **onMessage()** handler to
     detect this new action:
 
-    case "newconversation":
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+case "newconversation":
+const message = MessageFactory.text("This will be the first message in a new thread");
+await this.createConversation(context, message);
+break;
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    const message = MessageFactory.text("This will be the first message in a new
-    thread");
-
-    await this.createConversation(context, message);
-
-    break;
-
-6.  The last step is to add the **createConversation()** method that will create
+1.  The last step is to add the **createConversation()** method that will create
     the new conversation. Add the following method to the **ConversationalBot**
     class:
 
-    private async createConversation(context: TurnContext, message:
-    Partial\<Activity\>): Promise\<void\> {
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+private async createConversation(context: TurnContext, message: Partial<Activity>): Promise<void> {
+// get a reference to the bot adapter & create a connection to the Teams API
+const adapter = <BotFrameworkAdapter>context.adapter;
+// create a new conversation and get a reference to it
+const conversationReference = <ConversationReference>TurnContext.getConversationReference(context.activity);
+// send message
+await adapter.continueConversation(conversationReference, async turnContext => {
+await turnContext.sendActivity(message);
+});
+}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    // get a reference to the bot adapter & create a connection to the Teams API
+1.  **Save** this file.
 
-    const adapter = \<BotFrameworkAdapter\>context.adapter;
-
-    // create a new conversation and get a reference to it
-
-    const conversationReference =
-    \<ConversationReference\>TurnContext.getConversationReference(context.activity);
-
-    // send message
-
-    await adapter.continueConversation(conversationReference, async turnContext
-    =\> {
-
-    await turnContext.sendActivity(message);
-
-    });
-
-    }
-
-7.  **Save** this file.
-
-### **Task 2 - Test the bot sending new messages**
+### Task 2 - Test the bot sending new messages
 
 1.  In the Microsoft Teams, go to the channel you installed the bot in the
     previous section. Click **New Conversation** and @mention the bot with a
@@ -1324,3 +1041,6 @@ message from your bot.
 
 2.  Select the second button, **Create new thread in this channel**. Within a
     few seconds, you should see a new conversation appear in the channel:
+
+    ![Screenshot of a message from the bot using cards - updating a
+    card](media/ba30f66fa21970e29a410e23f2b63273.png)

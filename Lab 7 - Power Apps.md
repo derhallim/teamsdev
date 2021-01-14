@@ -1,9 +1,9 @@
-## **Exercise 1 - Build an app to retrieve Power Platform videos for readiness**
+## Exercise 1 - Build an app to retrieve Power Platform videos for readiness
 
 In this exercise, you’ll build a solution that retrieves, lists, and displays
 content that can be used for readiness.
 
-### **Task 1 - Install and pin Power Apps in Teams**
+### Task 1 - Install and pin Power Apps in Teams
 
 1.  Open a web browser window and navigate to the following URL:
 
@@ -37,7 +37,7 @@ app.
 
     ![](media/57476b0500806b5667030b86915ec939.png)
 
-### **Task 2 - Create the app and the tables**
+### Task 2 - Create the app and the tables
 
 1.  Select the Power Apps app.
 
@@ -252,7 +252,7 @@ The visual editor should resemble the image below.
 2.  Now that you’ve created the required tables, select **Save** on the
     upper-right corner to save the app and close the Power Apps Studio.
 
-### **Task 3 - Create flows to get the video details for configured feeds**
+### Task 3 - Create flows to get the video details for configured feeds
 
 1.  Select the **Build** tab.
 
@@ -583,10 +583,10 @@ The visual editor should resemble the image below.
 
     ![](media/3ac5340c73ce1c63ea682a62f3d32283.png)
 
-55. If the flow doesn't show as succeeded, select **Run** and it will display
-    the failed action with any associated error message.
+55. If the flow doesn't show as succeeded, select the flow run and it will
+    display the failed action with any associated error message.
 
-### **Task 4 - Edit the app to add the video library interface**
+### Task 4 - Edit the app to add the video library interface
 
 1.  Select Power Apps from the left rail in Teams.
 
@@ -623,8 +623,6 @@ The visual editor should resemble the image below.
 2.  Drag the label onto the screen.
 
 3.  Set the following properties with these values:
-
-4.  
 
 | **Property** | **Value**     |
 |--------------|---------------|
@@ -684,7 +682,7 @@ The visual editor should resemble the image below.
 | Width        | 450                        |
 | Height       | 649                        |
 
-1.  In the tree view on the left side of the screen, there are three controls
+1.  In the Tree view on the left side of the screen, there are three controls
     underneath the Video Gallery with names starting with Subtitle, Title, and
     Image.
 
@@ -696,29 +694,35 @@ The visual editor should resemble the image below.
 
 4.  Update the property value to the following formula:
 
-    ThisItem.Feed.Description
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ThisItem.Feed.Description
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-5.  Select the control that starts with **Title**.
+1.  Select the control that starts with **Title**.
 
-6.  Select the **Text** property from the property list on top-left.
+2.  Select the **Text** property from the property list on top-left.
 
-7.  Update the property value to the following formula:
+3.  Update the property value to the following formula:
 
-    ThisItem.Feed.Title
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ThisItem.Feed.Title
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-8.  Select the control that starts with **Image**.
+1.  Select the control that starts with **Image**.
 
-9.  Select the **Text** property from the property list on top-left.
+2.  Select the **Text** property from the property list on top-left.
 
-10. Update the property value to the following formula:
+3.  Update the property value to the following formula:
 
-    ThisItem.Feed.'Image Link'
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ThisItem.Feed.'Image Link'
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-11. Enter **Rectangle** in the search box.
+1.  Enter **Rectangle** in the search box.
 
-12. Drag the rectangle control onto the screen.
+2.  Drag the rectangle control onto the screen.
 
-13. Set the following properties with these values:
+3.  Set the following properties with these values:
 
 | **Property** | **Value** |
 |--------------|-----------|
@@ -747,13 +751,15 @@ The visual editor should resemble the image below.
 
 2.  Set the **Text** property value to the following formula:
 
-    'Video Library'.Selected.Title
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+'Video Library'.Selected.Title
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-3.  Enter **Video** in the search box.
+1.  Enter **Video** in the search box.
 
-4.  Drag the video control onto the screen.
+2.  Drag the video control onto the screen.
 
-5.  Set the following properties with these values:
+3.  Set the following properties with these values:
 
 | **Property** | **Value** |
 |--------------|-----------|
@@ -766,13 +772,15 @@ The visual editor should resemble the image below.
 
 2.  Set the **Media** property value to the following formula:
 
-    'Video Library'.Selected.'Video Link'
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+'Video Library'.Selected.'Video Link'
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-3.  Enter **HTML text** in the search box.
+1.  Enter **HTML text** in the search box.
 
-4.  Drag the HTML text control onto the screen.
+2.  Drag the HTML text control onto the screen.
 
-5.  Set the following properties with these values:
+3.  Set the following properties with these values:
 
 | **Property** | **Value** |
 |--------------|-----------|
@@ -787,13 +795,15 @@ The visual editor should resemble the image below.
 
 2.  Set the **HtmlText** property value to the following formula:
 
-    'Video Library'.Selected.Description
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+'Video Library'.Selected.Description
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-3.  Enter **Label** in the search box.
+1.  Enter **Label** in the search box.
 
-4.  Drag the Label onto the screen.
+2.  Drag the Label onto the screen.
 
-5.  Set the following properties with these values:
+3.  Set the following properties with these values:
 
 | **Property** | **Value** |
 |--------------|-----------|
@@ -808,15 +818,17 @@ The visual editor should resemble the image below.
 
 2.  Set the **Text** property value to the following formula:
 
-    Concatenate("Published On ",Text('Video Library'.Selected.'Published On'))
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Concatenate("Published On ",Text('Video Library'.Selected.'Published On'))
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-3.  Select **Screen2**.
+1.  Select **Screen2**.
 
-4.  Select **Add icon** from the properties pane.
+2.  Select **Add icon** from the properties pane.
 
-5.  Select the **Settings** icon type.
+3.  Select the **Settings** icon type.
 
-6.  Set the following properties with these values:
+4.  Set the following properties with these values:
 
 | **Property** | **Value** |
 |--------------|-----------|
@@ -830,15 +842,17 @@ The visual editor should resemble the image below.
 
 2.  Set the **OnSelect** property value to the following formula:
 
-    Navigate(Screen1)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Navigate(Screen1)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-3.  Select **Screen1**.
+1.  Select **Screen1**.
 
-4.  Select **Add icon** from the properties pane.
+2.  Select **Add icon** from the properties pane.
 
-5.  Select the **Back** icon type.
+3.  Select the **Back** icon type.
 
-6.  Set the following properties with these values:
+4.  Set the following properties with these values:
 
 | **Property** | **Value** |
 |--------------|-----------|
@@ -851,9 +865,11 @@ The visual editor should resemble the image below.
 
 2.  Set the **OnSelect** property value to the following formula:
 
-    Navigate(Screen2)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Navigate(Screen2)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-### **Task 5 - Test the app**
+### Task 5 - Test the app
 
 1.  Run the Power Automate flow.
 
@@ -889,9 +905,9 @@ The visual editor should resemble the image below.
 
 15. Select **Save and close**.
 
-## **Exercise 2 - Use sample apps from the Microsoft Teams store**
+## Exercise 2 - Use sample apps from the Microsoft Teams store
 
-### **Task 1 - Install the sample app**
+### Task 1 - Install the sample app
 
 1.  Select **Apps** at the bottom of the left pane in Teams.
 
@@ -939,7 +955,7 @@ check box, the addition of the app won't be announced.
 
     ![](media/65ca3d45c5a011ef5f60fcc8c4ed51ed.png)
 
-### **Task 2 - Run the sample app**
+### Task 2 - Run the sample app
 
 1.  To run the installed app, select the **Employee ideas** tab from the team
     channel.
