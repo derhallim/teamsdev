@@ -133,8 +133,8 @@ and send information back to Teams.
 
 11.  Azure will start to provision the new resource. This will take a moment or
     two. Once it's finished, navigate to the bot resource in the resource group.
-    
-    ![](https://github.com/getazureready/teamsdev/blob/e3b3daf72a64c0b116380db8d14221b23c792689/media/96638fc3c10970e7b27bfa51fbd52269.png)
+
+![](media/96638fc3c10970e7b27bfa51fbd52269.png)
     
 12.  In order for the bot to interact with Microsoft Teams, you must enable the
     Teams channel. From the bot resource in Azure, select **Channels** in the
@@ -143,12 +143,12 @@ and send information back to Teams.
 13.  On the **Connect to channels** pane, select the **Microsoft Teams** channel,
     then select **Save** to confirm the action.
 
-    ![](media/33253e7920705f1f7d8dca9d7d00f387.png)
+![](media/33253e7920705f1f7d8dca9d7d00f387.png)
 
 14.  Once this process is complete, you should see both the Web Chat and
     Microsoft Teams listed in your enabled channels:
 
-    ![](media/e58a6be16fc9148129a558aac2eea9b0.png)
+![](media/e58a6be16fc9148129a558aac2eea9b0.png)
 
 15.  Select **Configuration** from the left-hand navigation. Locate the
     **Microsoft App ID** field. Copy this ID of the bot to a notepad, as you'll
@@ -160,7 +160,7 @@ and send information back to Teams.
 
 18.  Select the **New client secret** button:
 
-    ![](media/9772d2391934a94fb8a94b698cc7ee68.png)
+![](media/9772d2391934a94fb8a94b698cc7ee68.png)
 
 19.  When prompted, give the secret a description like **Microsoft Client Secret** and select one of the
     expiration duration options provided and select **Add**.
@@ -169,7 +169,7 @@ and send information back to Teams.
     important you copy this value as it's only shown this one time; if you leave
     the page and come back, it will only show as a masked value.
 
-    ![](media/b95305748e763036b521d01aaf98ef71.png)
+ ![](media/b95305748e763036b521d01aaf98ef71.png)
 
 21. Copy the **Value** of the secret to a notepad, as you'll need it later.
 
