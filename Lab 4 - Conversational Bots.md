@@ -67,49 +67,49 @@ Teams app and interact with it from the Microsoft Teams client.
 
 -   **Microsoft App ID and password**: Auto create App ID and password
 
-1.  Azure will start to provision the new resource. This will take a moment or
+11.  Azure will start to provision the new resource. This will take a moment or
     two. Once it's finished, navigate to the bot resource in the resource group.
 
     ![](media/96638fc3c10970e7b27bfa51fbd52269.png)
 
-2.  In order for the bot to interact with Microsoft Teams, you must enable the
+12.  In order for the bot to interact with Microsoft Teams, you must enable the
     Teams channel. From the bot resource in Azure, select **Channels** in the
     left-hand navigation.
 
-3.  On the **Connect to channels** pane, select the **Microsoft Teams** channel,
+13.  On the **Connect to channels** pane, select the **Microsoft Teams** channel,
     then select **Save** to confirm the action.
 
     ![](media/33253e7920705f1f7d8dca9d7d00f387.png)
 
-4.  Once this process is complete, you should see both the Web Chat and
+14.  Once this process is complete, you should see both the Web Chat and
     Microsoft Teams listed in your enabled channels:
 
     ![](media/e58a6be16fc9148129a558aac2eea9b0.png)
 
-5.  Select **Settings** from the left-hand navigation. Scroll down to the
-    **Microsoft App ID** section. Copy the ID of the bot to a notepad, as you'll
+15.  Select **Configuration** from the left-hand navigation. Scroll down to the
+    **Microsoft App ID** section. Copy this ID of the bot to a notepad, as you'll
     need it later.
 
     ![](media/837151c79edcfdb4bcd372d3b327603f.png)
 
-6.  Select **Manage** to navigate to the Azure AD app blade.
+16.  In **Microsoft App ID**, select **Manage** to navigate to the Azure AD app blade.
 
-7.  Select **Certificates & secrets** from the left-hand navigation panel.
+17.  Select **Certificates & secrets** from the left-hand navigation panel.
 
-8.  Select the **New client secret** button:
+18.  Select the **New client secret** button:
 
     ![](media/9772d2391934a94fb8a94b698cc7ee68.png)
 
-9.  When prompted, give the secret a description and select one of the
+19. When prompted, give the secret a description and select one of the
     expiration duration options provided and select **Add**.
 
-10. The **Certificate & Secrets** page will display the new secret. It's
+20. The **Certificate & Secrets** page will display the new secret. It's
     important you copy this value as it's only shown this one time; if you leave
     the page and come back, it will only show as a masked value.
 
     ![](media/b95305748e763036b521d01aaf98ef71.png)
 
-11. Copy the value of the secret to a notepad, as you'll need it later.
+21. Copy the **value** of the secret to a notepad, as you'll need it later.
 
 ### Task 2 – Create Microsoft Teams App
 
@@ -168,7 +168,7 @@ Teams app and interact with it from the Microsoft Teams client.
     **What is the Microsoft App ID for the Bot. It's found in the Bot Framework
     portal
     (**[**https://dev.botframework.com**](https://dev.botframework.com/)**).**
-    (Enter the **Application (client) ID** value that you noted down in Task 1)
+    (Enter the **Microsoft App ID** that you noted down in Task 1)
 
     **Do you want to add a static tab to your bot?** No
 
@@ -200,7 +200,7 @@ await context.sendActivity(replyActivity);
 }
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1.  The method handler you added contains a reference to two objects you haven't
+3.  The method handler you added contains a reference to two objects you haven't
     imported into the bot file. Add the following code after the existing import
     statements at the top of the file to import the TextEncoder object:
 
@@ -209,7 +209,7 @@ import * as Util from "util";
 const TextEncoder = Util.TextEncoder;
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1.  Add a reference to the MessageFactory object, by adding it to the existing
+4.  Add a reference to the MessageFactory object, by adding it to the existing
     list of object references in the **botbuilder** package import at the top of
     the file:
 
@@ -226,9 +226,9 @@ MessageFactory
 } from 'botbuilder';
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1.  Locate the handler onMessage() within the constructor().
+5.  Locate the handler onMessage() within the constructor().
 
-2.  Locate and replace the line if (text.startsWith("hello")) { in the
+6.  Locate and replace the line if (text.startsWith("hello")) { in the
     onMessage() handler with the following code:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -238,7 +238,7 @@ return;
 } else if (text.startsWith("hello")) {
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1.  **Save** the file and close it.
+7.  **Save** the file and close it.
 
 ### Task 4 - Update the project's environment variables
 
@@ -259,7 +259,7 @@ MICROSOFT_APP_ID=
 MICROSOFT_APP_PASSWORD=
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1.  **Save** the file and close it.
+3.  **Save** the file and close it.
 
 ### Task 5 - Register the bot in the Microsoft Teams app
 
@@ -293,14 +293,14 @@ manifest. You can use App Studio to do this.
 
     **Scope**: Personal, Team
 
-1.  Select **Save**.
+7.  Select **Save**.
 
     ![](media/342e8b466037adb905653dcec59e4ff3.png)
 
-2.  Within the **Commands** section, select **Add** to add a new command to the
+8.  Within the **Commands** section, select **Add** to add a new command to the
     bot.
 
-3.  On the **New command** dialog, enter the following values:
+9.  On the **New command** dialog, enter the following values:
 
     -   **Command text**: MentionMe
 
@@ -308,21 +308,21 @@ manifest. You can use App Studio to do this.
 
     -   **Scope**: Personal
 
-4.  Click **Save**
+10.  Click **Save**
 
-5.  With the bot added to the Teams app, you need to update the manifest in your
+11.  With the bot added to the Teams app, you need to update the manifest in your
     project. From the **(3) Finish** \> **Test and distribute** section, select
     the **Download** button from the **Download** section.
 
-6.  This will download the app package as a ZIP. Unpack the zip and open the
+12.  This will download the app package as a ZIP. Unpack the zip and open the
     **manifest.json** file in it.
 
-7.  In the
+13.  In the
     **C:\\Teams_Projects\\learn-msteams-bots2\\src\\manifest\\manifest.json**
     file, locate the property id. Change its value to match the GUID of the
     Azure AD app that was created when creating the bot in the Azure portal.
 
-8.  Update the **bots** section to include the **commands** for **MentionMe**.
+14.  Update the **bots** section to include the **commands** for **MentionMe**.
     You can get this from **manifest.json** file that you extracted in step 12.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -351,7 +351,7 @@ manifest. You can use App Studio to do this.
 ],
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1.  **Save** this file and close it.
+15.  **Save** this file and close it.
 
 **Important**
 
@@ -396,19 +396,19 @@ map to our locally running web server. In order for the Bot Framework to route
 messages from Microsoft Teams to our locally running bot, you need to update the
 bot's messaging endpoint in the Azure portal.
 
-1.  Open a new browser tab and navigate to the following URL:
+5.  Open a new browser tab and navigate to the following URL:
 
     <https://portal.azure.com>
 
-2.  If not already signed in, then click **Sign in** and sign in with your lab
+6.  If not already signed in, then click **Sign in** and sign in with your lab
     admin credentials.
 
-3.  Locate the bot by selecting the Azure Resource Group and Bot Channels
+7.  Locate the bot by selecting the Azure Resource Group and Bot Channels
     Registration resource you created at the beginning of this exercise.
 
-4.  Using the left-hand navigation, select **Bot management** \> **Settings**.
+4.  Using the left-hand navigation, select **Bot management** \> **Configuration**.
 
-5.  Locate the property **Configuration** \> **Messaging endpoint** and set the
+8.  Locate the property **Messaging endpoint** and set the
     domain to the NGrok domain.
 
 6.  Finally, save your changes to the bot configuration using the **Save**
@@ -483,14 +483,14 @@ bot to respond to message reactions, and update or delete messages capabilities.
 1.  Open the file
     **C:\\Teams_Projects\\learn-msteams-bots2\\src\\manifest\\manifest.json**.
 
-    1.  Locate the property **version** and increment the value to **0.0.2**.
+2. Locate the property **version** and increment the value to **0.0.2**.
 
-    2.  **Save** this file and close it.
+3. **Save** this file and close it.
 
-    3.  Open the file
+4. Open the file
         **C:\\Teams_Projects\\learn-msteams-bots2\\src\\app\\conversationalBot\\ConversationalBot.ts**.
 
-    4.  Locate the existing **onMessage()** handler in the class constructor and
+5. Locate the existing **onMessage()** handler in the class constructor and
         find the if statement that checks for the **mentionme** string. Replace
         the contents of the if statement to check the type of conversation the
         message was sent from to call the corresponding handler.
@@ -503,7 +503,7 @@ await this.handleMessageMentionMeChannelConversation(context);
 }
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1.  The complete if statement in the **onMessage()** handler should now look
+6. The complete if statement in the **onMessage()** handler should now look
     like the following:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -525,7 +525,7 @@ await context.sendActivity(`I\'m terribly sorry, but my developer hasn\'t traine
 }
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1.  Finally, add the following method to the **ConversationalBot** class to
+7. Finally, add the following method to the **ConversationalBot** class to
     implement the handler for our new scenario:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -542,7 +542,7 @@ await context.sendActivities([replyActivity, followupActivity]);
 }
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1.  **Save** the file and close it.
+8. **Save** the file and close it.
 
 ### Task 2 - Test the conversation bot in a channel
 
@@ -558,42 +558,42 @@ subdomain. You need to update your bot registration's **Messaging endpoint** in
 the Azure portal (*shown in a previous exercise*) with this new domain before
 testing it.
 
-1.  Open a new browser tab and navigate to the following URL:
+3.  Open a new browser tab and navigate to the following URL:
 
     <https://teams.microsoft.com>
 
-2.  Click on **Use the web app instead**.
+4.  Click on **Use the web app instead**.
 
-3.  Using the left navigation menu, select the **Apps** button at the bottom.
+5.  Using the left navigation menu, select the **Apps** button at the bottom.
 
-4.  Hover over **Conversational Bot** tile, click on **…** at the top right
+6.  Hover over **Conversational Bot** tile, click on **…** at the top right
     corner of the tile and click **Update**.
 
-5.  Browse and select
+7.  Browse and select
     **C:\\Teams_Projects\\learn-msteams-bots2\\package\\ConversationalBot.zip**
     and click **Open**. The package should be uploaded.
 
-6.  Refresh your web browser page. Microsoft Teams will display a tile for
+8.  Refresh your web browser page. Microsoft Teams will display a tile for
     **Conversational Bot** app. Click on this tile.
 
-7.  Click on the down arrow next to **Open** and select **Add to a team**.
+9.  Click on the down arrow next to **Open** and select **Add to a team**.
 
     ![](media/b46ac38bae84803a9ef4f07ec6e88276.png)
 
-8.  In the **Type a team or channel name** dialog box, click on the search icon
+10.  In the **Type a team or channel name** dialog box, click on the search icon
     and select an existing team.
 
     ![](media/d7c6ff16bd1b4d677232f691972be8b0.png)
 
-9.  Then select **Set up a bot.**
+11.  Then select **Set up a bot.**
 
-10. This will take you to the Teams channel that you selected earlier. In the
+12. This will take you to the Teams channel that you selected earlier. In the
     message box, @mention the bot. The first time you @mention the bot, you'll
     be prompted to install it into the team.
 
     ![](media/62a23766e76d0bdc30adf6b4beefba01.png)
 
-11. After installing the bot, when you @mention it and include the message
+13. After installing the bot, when you @mention it and include the message
     *mentionme*, the bot will reply to your message:
 
     ![](media/12183d5d02032d26938e0c60fb55ab31.png)
@@ -654,7 +654,7 @@ await context.sendActivity({ attachments: [card] });
 return;
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1.  The **onMessage()** handler's if statement should now look similar to the
+3.  The **onMessage()** handler's if statement should now look similar to the
     following:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -683,7 +683,7 @@ Notice the else statement will send a card to the conversation that contains a
 data object in the single actions. This object has a count property & cardAction
 property. When a user triggers the action, this object will be sent to the bot.
 
-1.  Add the following methods to implement the updateCardActivity() & the
+4.  Add the following methods to implement the updateCardActivity() & the
     deleteCardActivity() handlers:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -746,13 +746,13 @@ uses the updateActivity() method to update an existing message.
 
 The deleteCardActivity() deletes the card using the deleteActivity() method.
 
-1.  Within the **onMessage()** method, locate the following line of code:
+5.  Within the **onMessage()** method, locate the following line of code:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 case ActivityTypes.Message:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1.  You're going to add a conditional check to determine if the message is an
+6.  You're going to add a conditional check to determine if the message is an
     action from our card or a message from the user. First, wrap the entire
     contents of this **case** statement in the else part of a new **if-else**
     block:
@@ -768,7 +768,7 @@ if () {
 break;
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1.  Next, update the if statement to check if the message contains a **value**
+7.  Next, update the if statement to check if the message contains a **value**
     property:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -782,7 +782,7 @@ if (context.activity.value) {
 break;
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1.  Finally, add the following switch statement to the if block, replacing the
+8.  Finally, add the following switch statement to the if block, replacing the
     **// TODO - insert card action logic** comment, to determine if the action
     requested should update or delete the card:
 
@@ -797,7 +797,7 @@ break;
 }
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1.  The final **onMessage()** method should look like the following code:
+9.  The final **onMessage()** method should look like the following code:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 this.onMessage(async (context: TurnContext): Promise<void> => {
@@ -847,7 +847,7 @@ return this.conversationState.saveChanges(context);
 });
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1.  **Save** this file.
+10.  **Save** this file.
 
 ### Task 4 - Test the bot updating existing messages
 
@@ -893,7 +893,7 @@ await context.sendActivity("Thank you!");
 This code will execute when a user adds a reaction to a message from the bot. If
 the reaction is a *like*, the bot will reply with a *"Thank you!"* message.
 
-1.  **Save** this file.
+3.  **Save** this file.
 
 ### Task 6 - Test the bot reacting to message reactions
 
@@ -909,7 +909,7 @@ subdomain. You need to update your bot registration's **Messaging endpoint** in
 the Azure portal (*shown in a previous exercise*) with this new domain before
 testing it.
 
-1.  In the Microsoft Teams, go to the channel you installed the bot in the
+3.  In the Microsoft Teams, go to the channel you installed the bot in the
     previous section. Click **New Conversation** and @mention the bot with a
     random string. Then apply a *like* reaction to it. The bot will respond with
     a **Thank you!**
@@ -943,7 +943,7 @@ ConversationResourceResponse,
 } from "botbuilder";
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1.  Locate the card in the **else** statement in the **onMessage()** handler you
+3.  Locate the card in the **else** statement in the **onMessage()** handler you
     added in the previous section. Add a second action button to the card that
     will trigger the creation of a new message:
 
@@ -955,7 +955,7 @@ ConversationResourceResponse,
 }
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1.  The card should now look like the following:
+4.  The card should now look like the following:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 const card = CardFactory.adaptiveCard({
@@ -1000,7 +1000,7 @@ const card = CardFactory.adaptiveCard({
 });
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1.  Next, add another case statement to the switch
+5.  Next, add another case statement to the switch
     (context.activity.value.cardAction) statement the **onMessage()** handler to
     detect this new action:
 
@@ -1011,7 +1011,7 @@ await this.createConversation(context, message);
 break;
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1.  The last step is to add the **createConversation()** method that will create
+6.  The last step is to add the **createConversation()** method that will create
     the new conversation. Add the following method to the **ConversationalBot**
     class:
 
@@ -1028,7 +1028,7 @@ await turnContext.sendActivity(message);
 }
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1.  **Save** this file.
+7.  **Save** this file.
 
 ### Task 2 - Test the bot sending new messages
 
