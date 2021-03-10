@@ -133,9 +133,9 @@ and send information back to Teams.
 
 11.  Azure will start to provision the new resource. This will take a moment or
     two. Once it's finished, navigate to the bot resource in the resource group.
-
-    ![](media/96638fc3c10970e7b27bfa51fbd52269.png)
-
+    
+    ![](https://github.com/getazureready/teamsdev/blob/e3b3daf72a64c0b116380db8d14221b23c792689/media/96638fc3c10970e7b27bfa51fbd52269.png)
+    
 12.  In order for the bot to interact with Microsoft Teams, you must enable the
     Teams channel. From the bot resource in Azure, select **Channels** in the
     left-hand navigation.
