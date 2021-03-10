@@ -148,17 +148,17 @@ you preceed the URL with **https://**.
 11.  Microsoft Teams will display a tile for **Learn MSTeams Tabs** app. Click on
     this tile.
 
-    ![](media/7bb9bbef692a90082a3f867d04f8af31.png)
+   ![](media/7bb9bbef692a90082a3f867d04f8af31.png)
 
 12.  Here you can see some **TODO** items to address. You'll update the todo
     items later in the exercise\*.\*
 
-    ![](media/3a7382a5e15aec8ccb55a00cfa9b4843.png)
+   ![](media/3a7382a5e15aec8ccb55a00cfa9b4843.png)
 
 13.  Select the **Add** button to install the app. You will be taken to the new
     tab.
 
-    ![](media/89a92dc3093cb9df11ca072231c2b58a.png)
+   ![](media/89a92dc3093cb9df11ca072231c2b58a.png)
 
 Notice that when the content page is loaded in a tab within the Microsoft teams
 client, it displays the entityId property of the tab, not the message "This
@@ -170,7 +170,7 @@ by using the Microsoft Teams JavaScript SDK.
     added apps** button (**…**) in the left navigation pane. You can see the
     **Learn MSTeams Tabs** app in the **Recent** apps.
 
-    ![](media/ca33a17ecaf43a8ed6887719155ca3ab.png)
+   ![](media/ca33a17ecaf43a8ed6887719155ca3ab.png)
 
 15.  Uninstall the app by right-clicking the app and select **Uninstall**. Then
     select **Uninstall** in the confirmation dialog box that appears.
@@ -301,11 +301,11 @@ TODO: add new list item form here
     **https://{your-ngrok-subdomain}.ngrok.io/learnPersonalTab/index.html** in
     the browser.
 
-    ![](media/5c06d544edce095f13a431786f05817b.png)
+   ![](media/5c06d544edce095f13a431786f05817b.png)
 
 11.  Add the query string value ?theme=dark to the URL to see the theme change:
 
-    ![](media/268e7813058372e70b9da2d4e449f875.png)
+   ![](media/268e7813058372e70b9da2d4e449f875.png)
 
 12.  Next, stop the local web server by selecting Ctrl+C in the console to stop
     the running process.
