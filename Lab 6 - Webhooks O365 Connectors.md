@@ -60,7 +60,7 @@ After answering the generator's questions, the generator will create the
 scaffolding for the project and then execute npm install that downloads all the
 dependencies required by the project.
 
-1.  Our web service will need one more NPM package to simplify finding data in
+6.  Our web service will need one more NPM package to simplify finding data in
     an array. Execute the following command in the command prompt from the root
     folder of the project to install the library Lodash:
 
@@ -167,9 +167,9 @@ dependencies required by the project.
 ]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1.  **Save** this file and close it.
+3.  **Save** this file and close it.
 
-2.  Create a new file named **planetDisplayCard.json** and add the following
+4.  Create a new file named **planetDisplayCard.json** and add the following
     JSON to it. This file will contain a template of the adaptive card the web
     service will respond with:
 
@@ -263,9 +263,9 @@ dependencies required by the project.
 }
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1.  **Save** this file and close it.
+5.  **Save** this file and close it.
 
-2.  Open the file
+6.  Open the file
     **C:\\Teams_Projects\\learn-msteams\\src\\app\\teamsWebhooksOutgoingWebhook\\TeamsWebhooksOutgoingWebhook.ts**,
     just after the existing import statements:
 
@@ -273,7 +273,7 @@ dependencies required by the project.
 import { find, sortBy } from "lodash";
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1.  Add the following method to the TeamsWebhooksOutgoingWebhook class. The
+7.  Add the following method to the TeamsWebhooksOutgoingWebhook class. The
     getPlanetDetailCard() method will load and populate the adaptive card
     template with details using the provided planet object:
 
@@ -298,7 +298,7 @@ return builder.CardFactory.adaptiveCard(adaptiveCardSource);
 }
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1.  Next, add the following method to the TeamsWebhooksOutgoingWebhook class.:
+8.  Next, add the following method to the TeamsWebhooksOutgoingWebhook class.:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 private static processAuthenticatedRequest(incomingText: string): Partial<builder.Activity> {
@@ -321,7 +321,7 @@ return message;
 }
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1.  Add the following scrubMessage() method to the TeamsWebhooksOutgoingWebhook
+9.  Add the following scrubMessage() method to the TeamsWebhooksOutgoingWebhook
     class.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -333,7 +333,7 @@ return cleanMessage;
 }
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1.  In the requestHandler() method, locate the following code and change the
+10.  In the requestHandler() method, locate the following code and change the
     **message** declaration from a **const** to **let** as you'll change this
     value.
 
@@ -344,20 +344,20 @@ type: builder.ActivityTypes.Message
 ...
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1.  In the requestHandler() method, locate the following code:
+11.  In the requestHandler() method, locate the following code:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 message.text = `Echo ${incoming.text}`;
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1.  And replace with the following code:
+12.  And replace with the following code:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 const scrubbedText = TeamsWebhooksOutgoingWebhook.scrubMessage(incoming.text);
 message = TeamsWebhooksOutgoingWebhook.processAuthenticatedRequest(scrubbedText);
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1.  **Save** the file and close it.
+13.  **Save** the file and close it.
 
 ### Task 3 - Test the outgoing webhook
 
@@ -389,25 +389,25 @@ ngrok, it will create a new unique URL. This will require you to reconfigure
 your webhooks each time you restart it. However, you can restart the web server
 you started with **gulp serve** without impacting ngrok.
 
-1.  In the browser, navigate to <https://teams.microsoft.com> and if prompted,
+6.  In the browser, navigate to <https://teams.microsoft.com> and if prompted,
     sign in with your lab admin credentials.
 
-2.  Once you're signed in, select a channel in a team you want to add the
+7.  Once you're signed in, select a channel in a team you want to add the
     webhook to. From the channel's page, select the **+** in the top navigation:
 
     ![](media/3bf3a043142744769f6742fa54a3b92a.png)
 
-3.  On the **Add a tab** dialog, select **Manage apps** in the lower right
+8.  On the **Add a tab** dialog, select **Manage apps** in the lower right
     corner:
 
     ![](media/4d22d0320e082c2269ad65ed292e8ffa.png)
 
-4.  This will take you to the **Manage Channel** page. Select the **Create an
+9.  This will take you to the **Manage Channel** page. Select the **Create an
     outgoing webhook** in the lower right corner:
 
     ![](media/01493b7d23920c7c7c336cb481fda62d.png)
 
-5.  In the **Create an outgoing webhook** dialog, enter the following values,
+10.  In the **Create an outgoing webhook** dialog, enter the following values,
     and select **Create**:
 
 -   **Name**: Planet Details
@@ -420,34 +420,34 @@ you started with **gulp serve** without impacting ngrok.
 
 -   **Description**: View details about the planet entered in the message.
 
-1.  After creating the outgoing webhook, Microsoft Teams will display a security
+11.  After creating the outgoing webhook, Microsoft Teams will display a security
     token.
 
-    ![](media/329527726597028a9cba47be4ebf01af.png)
+   ![](media/329527726597028a9cba47be4ebf01af.png)
 
-2.  Copy this value and set the SECURITY_TOKEN property in the
+12.  Copy this value and set the SECURITY_TOKEN property in the
     **C:\\Teams_Projects\\learn-msteams\\.env** file in the project. **Save**
     this file and close it.
 
-3.  On the **Command Prompt** window where you executed *gulp serve* command,
+13.  On the **Command Prompt** window where you executed *gulp serve* command,
     stop the process by pressing Ctrl+C and then start it again but running the
     following command:
 
     *gulp serve*
 
-4.  Now you can test the webhook. In **Microsoft Teams**, go to a Teams channel
+14.  Now you can test the webhook. In **Microsoft Teams**, go to a Teams channel
     and enter the message **@Planet Details Venus**. Notice that as you're
     typing the message, Microsoft Teams detects the name of the webhook:
 
-    ![](media/8c30d2ab1593e78318b231911af7720b.png)
+   ![](media/8c30d2ab1593e78318b231911af7720b.png)
 
-5.  A few seconds after submitting the message, you'll see a reply to your
+15.  A few seconds after submitting the message, you'll see a reply to your
     message appear that contains the customized adaptive card with details about
     the planet:
 
-    ![](media/a57a347b08de40b0611a46e66ea0b51a.png)
+   ![](media/a57a347b08de40b0611a46e66ea0b51a.png)
 
-6.  You've successfully tested your outgoing webhook! Stop the local web server
+16.  You've successfully tested your outgoing webhook! Stop the local web server
     by pressing CTRL+C in the console.
 
 ## Exercise 2 - Create incoming webhooks
@@ -565,9 +565,9 @@ add the following JSON to the  tab and select the  option:
 it must be an Office 365 Connector Cards; adaptive cards aren't supported when
 sending messages to incoming webhooks.
 
-1.  Send the card to Microsoft Teams by selecting the **Send** button.
+3.  Send the card to Microsoft Teams by selecting the **Send** button.
 
-2.  In the browser, navigate back to the **Microsoft Teams** channel where you
+4.  In the browser, navigate back to the **Microsoft Teams** channel where you
     installed the incoming webhook. You should see a message containing your
     card:
 
@@ -609,15 +609,15 @@ that contains a web service and the necessary details to associate the Office
     address of the configuration page because we are only testing the Connector
     in Microsoft Teams.
 
-1.  Select the **I accept the terms and conditions...** checkbox and select
+4.  Select the **I accept the terms and conditions...** checkbox and select
     **Save** to register the Connector.
 
-2.  After successfully registering your Connector, the **Connectors Developer
+5.  After successfully registering your Connector, the **Connectors Developer
     Dashboard** page will display some additional sections. While there's a
     button to **Download Manifest** for a custom Microsoft Teams app, we'll use
     the manifest created by the Yeoman Generator for Microsoft Teams.
 
-3.  You'll need the ID of your new Connector later in the exercise. This ID, a
+6.  You'll need the ID of your new Connector later in the exercise. This ID, a
     GUID, can be found in the URL of the updated page. Copy this ID for later
     use.
 
@@ -703,13 +703,13 @@ dependencies required by the project.
 "composeExtensions": []
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1.  **Save** this file and close it.
+3.  **Save** this file and close it.
 
-2.  Open the file
+4.  Open the file
     **C:\\Teams_Projects\\learn-msteams-connectors\\src\\app\\scripts\\myFirstTeamsConnector\\
     MyFirstTeamsConnectorConfig.tsx**.
 
-3.  Within the componentWillMount() React lifecycle event handler, locate the
+5.  Within the componentWillMount() React lifecycle event handler, locate the
     following code:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -721,20 +721,20 @@ this.setValidityState(this.state.color !== undefined);
 });
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1.  The find() method needs to be replaced with a filter() method. Update this
+6.  The find() method needs to be replaced with a filter() method. Update this
     line:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 color: availableColors.find(c => c.code === context.entityId),
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1.  ... to the following:
+7.  ... to the following:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 color: availableColors.filter(c => c.code === context.entityId)[0],
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1.  **Save** this file and close it.
+8.  **Save** this file and close it.
 
 ### Task 4 - Test the Office 365 Connector in Microsoft Teams
 
@@ -904,9 +904,9 @@ Connector Cards for messages sent to Microsoft Teams. Adaptive cards aren't
 supported when sending messages with cards when using Connectors or incoming
 webhooks.
 
-1.  Select the **Send** button in Postman.
+17.  Select the **Send** button in Postman.
 
-2.  When you go back to the channel, you'll see the card displayed as a message
+18.  When you go back to the channel, you'll see the card displayed as a message
     in the team:
 
-    ![](media/3608b1211e38ca96838c42374ae09937.png)
+   ![](media/3608b1211e38ca96838c42374ae09937.png)
