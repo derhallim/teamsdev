@@ -114,48 +114,48 @@ bot's messaging endpoint in the Azure portal.
 
 ![](media/27dd78555237ec344f7551b714423d96.png)
 
-4\. Open a browser and go to the ngrok URL displayed in the console. Ensure that
+3. Open a browser and go to the ngrok URL displayed in the console. Ensure that
 you preceed the URL with **https://**.
 
 ![](media/e14f9710cb2583b14bbcf8659102aa8e.png)
 
-1.  Update the URL in the browser to load the tab created by the scaffolding
+4.  Update the URL in the browser to load the tab created by the scaffolding
     process (**/learnPersonalTab/index.html**). Here you can see the page can
     determine that it isn't running within the Microsoft Teams client.
 
 ![](media/31de6d43c36406df1941a3206b3183d9.png)
 
-1.  Now let's load the tab in Microsoft Teams. In the browser, go to **Microsoft
+5.  Now let's load the tab in Microsoft Teams. In the browser, go to **Microsoft
     Teams** (<https://teams.microsoft.com> ).
 
-2.  If prompted to sign in then sign in with your lab admin credentials.
+6.  If prompted to sign in then sign in with your lab admin credentials.
 
-3.  Choose **Use web client instead**.
+7.  Choose **Use web client instead**.
 
-4.  In the left navigation pane, select the **More added apps** button **(…)**.
+8.  In the left navigation pane, select the **More added apps** button **(…)**.
     Then select **More apps**.
 
     ![](media/04643990c34f3038c166c4bab85f7534.png)
 
-5.  Under **Apps** section, click on **Upload a custom app** and then **Upload
+9.  Under **Apps** section, click on **Upload a custom app** and then **Upload
     for Contoso**.
 
     ![](media/58c5be51ccb929e03e9d8d648b5d89be.png)
 
-6.  Browse and select **C:\\Teams_Projects\\learn-msteams-tabs\\package\\Learn
+10.  Browse and select **C:\\Teams_Projects\\learn-msteams-tabs\\package\\Learn
     MSTeams Tabs.zip** and click **Open**. The package should be uploaded.
 
-7.  Microsoft Teams will display a tile for **Learn MSTeams Tabs** app. Click on
+11.  Microsoft Teams will display a tile for **Learn MSTeams Tabs** app. Click on
     this tile.
 
     ![](media/7bb9bbef692a90082a3f867d04f8af31.png)
 
-8.  Here you can see some **TODO** items to address. You'll update the todo
+12.  Here you can see some **TODO** items to address. You'll update the todo
     items later in the exercise\*.\*
 
     ![](media/3a7382a5e15aec8ccb55a00cfa9b4843.png)
 
-9.  Select the **Add** button to install the app. You will be taken to the new
+13.  Select the **Add** button to install the app. You will be taken to the new
     tab.
 
     ![](media/89a92dc3093cb9df11ca072231c2b58a.png)
@@ -166,19 +166,19 @@ isn't hosted in Microsoft Teams" as you saw when you viewed the content page in
 the browser. The tab can detect if it's loaded within the Microsoft Teams client
 by using the Microsoft Teams JavaScript SDK.
 
-1.  In the left navigation pane, click on **Chat** and then click on **More
+14.  In the left navigation pane, click on **Chat** and then click on **More
     added apps** button (**…**) in the left navigation pane. You can see the
     **Learn MSTeams Tabs** app in the **Recent** apps.
 
     ![](media/ca33a17ecaf43a8ed6887719155ca3ab.png)
 
-2.  Uninstall the app by right-clicking the app and select **Uninstall**. Then
+15.  Uninstall the app by right-clicking the app and select **Uninstall**. Then
     select **Uninstall** in the confirmation dialog box that appears.
 
-3.  Next, stop the local web server by selecting Ctrl+C in the console to stop
+16.  Next, stop the local web server by selecting Ctrl+C in the console to stop
     the running process.
 
-4.  For **Terminate batch job (Y/N)?**, enter **Y** and press enter key.
+17.  For **Terminate batch job (Y/N)?**, enter **Y** and press enter key.
 
 ### Task 4 - Implement the personal tab's user interface
 
@@ -193,15 +193,15 @@ by using the Microsoft Teams JavaScript SDK.
 import { Provider, Flex, Text, Button, Header } from "@fluentui/react-northstar";
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1.  Replace the previous statement with the following import statement:
+3.  Replace the previous statement with the following import statement:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 import { Provider, Flex, Text, Button, Header, List, Alert, teamsTheme, teamsDarkTheme, teamsHighContrastTheme, ThemePrepared, WindowMaximizeIcon, ExclamationTriangleIcon, Label, Input, ToDoListIcon } from "@fluentui/react-northstar";
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1.  Remove all the statements below the last import statement.
+4.  Remove all the statements below the last import statement.
 
-2.  Locate the ILearnPersonalTabState interface in the **LearnPersonalTab.tsx**
+5.  Locate the ILearnPersonalTabState interface in the **LearnPersonalTab.tsx**
     file, and add the following properties to it:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -210,7 +210,7 @@ todoItems: string[];
 newTodoValue: string;
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1.  Add the following method to the LearnPersonalTab class that updates the
+6.  Add the following method to the LearnPersonalTab class that updates the
     component state to the theme that matches the currently selected Microsoft
     Teams client theme:
 
@@ -238,7 +238,7 @@ teamsTheme: theme
 }
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1.  Initialize the current theme and state of the component. Locate the line
+6.  Initialize the current theme and state of the component. Locate the line
     this.updateTheme(this.getQueryVariable("theme")); and replace it with the
     following code in the componentWillMount() method:
 
@@ -250,7 +250,7 @@ newTodoValue: ""
 }));
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1.  Within the componentWillMount() method, locate the following line:
+7.  Within the componentWillMount() method, locate the following line:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 microsoftTeams.registerOnThemeChangeHandler(this.updateTheme);
@@ -265,7 +265,7 @@ another handler to update the component theme:
 microsoftTeams.registerOnThemeChangeHandler(this.updateComponentTheme);
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1.  Locate the render() method, and update it to the following code. The
+8.  Locate the render() method, and update it to the following code. The
     render() method now displays the list of items in our state output with a
     brief copyright statement.
 
@@ -292,27 +292,27 @@ TODO: add new list item form here
 }
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1.  **Save** this file.
+9.  **Save** this file.
 
 **Tip**
 
-1.  At this point, you can test your tab without loading it in Microsoft Teams.
+10.  At this point, you can test your tab without loading it in Microsoft Teams.
     Run the command **gulp ngrok-serve** from the command line, and go to
     **https://{your-ngrok-subdomain}.ngrok.io/learnPersonalTab/index.html** in
     the browser.
 
     ![](media/5c06d544edce095f13a431786f05817b.png)
 
-2.  Add the query string value ?theme=dark to the URL to see the theme change:
+11.  Add the query string value ?theme=dark to the URL to see the theme change:
 
     ![](media/268e7813058372e70b9da2d4e449f875.png)
 
-3.  Next, stop the local web server by selecting Ctrl+C in the console to stop
+12.  Next, stop the local web server by selecting Ctrl+C in the console to stop
     the running process.
 
-4.  For **Terminate batch job (Y/N)?**, enter **Y** and press enter key.
+13.  For **Terminate batch job (Y/N)?**, enter **Y** and press enter key.
 
-5.  The next step is to add some interactivity to the tab. Add the following
+14.  The next step is to add some interactivity to the tab. Add the following
     methods to the LearnPersonalTab class. These methods handle updating the
     state when specific events happen on the form that you'll add to the
     component.
@@ -331,7 +331,7 @@ newTodoValue: ""
 }
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1.  Finally, locate the string TODO: add new list item form here in the render()
+15.  Finally, locate the string TODO: add new list item form here in the render()
     method, and replace it with the following code. This code displays a form
     that the user can use to add items to the list.
 
@@ -357,7 +357,7 @@ onClick={this.handleOnClick}></Button>
 </Flex>
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1.  **Save** this file and close it.
+16.  **Save** this file and close it.
 
 ### Task 5 - Use App Studio to update the Microsoft Teams app manifest
 
@@ -396,21 +396,21 @@ changes.
 
 -   **Full description**: *enter a long description*
 
-1.  Update the name of the tab by selecting **Capabilities** \> **Tabs** in the
+8.  Update the name of the tab by selecting **Capabilities** \> **Tabs** in the
     left pane in App Studio.
 
-2.  Locate the only personal tab in the project. Select the menu for more
+9.  Locate the only personal tab in the project. Select the menu for more
     options on the tab and select **Edit**. Change the name of the tab to **My
     First Tab**. Update the **Content URL** property with your new ngrok
     subdomain. Ensure that **\&theme={theme}** is added to the end of the
     Content URL property.
 
-3.  Select **Save** to save your changes.
+10.  Select **Save** to save your changes.
 
     The changes made to the app within App Studio aren't saved to your project.
     If you want to update the project, download the app package from App Studio.
 
-4.  To download the project, select **Finish** \> **Test and distribute** in the
+11.  To download the project, select **Finish** \> **Test and distribute** in the
     left pane in App Studio. Then select **Download**.
 
 ### Task 6 - Install and test the Microsoft Teams app
@@ -533,7 +533,7 @@ page in a Microsoft Teams app.
 import { Provider, Flex, Header, Input} from "@fluentui/react-northstar";
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1.  Replace the previous statement with the following import statement:
+3.  Replace the previous statement with the following import statement:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 import {
@@ -550,7 +550,7 @@ Dropdown
 } from "@fluentui/react-northstar";
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1.  Locate the IConfigMathTabConfigState interface, and replace its contents
+4.  Locate the IConfigMathTabConfigState interface, and replace its contents
     with the following two members:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -558,7 +558,7 @@ teamsTheme: ThemePrepared;
 mathOperator: string;
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1.  Add the following method to the ConfigMathTabConfig class that will update
+5.  Add the following method to the ConfigMathTabConfig class that will update
     the component state to match the currently selected Microsoft Teams client
     theme:
 
@@ -586,7 +586,7 @@ teamsTheme: componentTheme
 }
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1.  Initialize the current theme and state of the component. Locate the line
+6.  Initialize the current theme and state of the component. Locate the line
     this.updateTheme(this.getQueryVariable("theme")); and replace it with the
     following code in the componentWillMount() method:
 
@@ -594,7 +594,7 @@ teamsTheme: componentTheme
 this.updateComponentTheme(this.getQueryVariable("theme"));
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1.  Locate the line in the componentWillMount() method that contains the call to
+7.  Locate the line in the componentWillMount() method that contains the call to
     microsoftTeams.getContext. The function passed into this method sets the
     state of the React component. Replace the this.setState method with the
     following code. (Leave the rest of get getContext delegate unchanged.) This
@@ -607,7 +607,7 @@ mathOperator: context.entityId.replace("MathPage", "")
 }));
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1.  Next, locate the following line in the componentWillMount() method:
+8.  Next, locate the following line in the componentWillMount() method:
     microsoftTeams.settings.registerOnSaveHandler(). This method lets you
     provide the function to execute when the user selects the **Save** button on
     the configuration page. This code should save any settings you need to save
@@ -629,7 +629,7 @@ saveEvent.notifySuccess();
 });
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1.  Add the following event handler to the ConfigMathTabConfig class, which
+9.  Add the following event handler to the ConfigMathTabConfig class, which
     updates the component state to be the value of the selected operator:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -640,7 +640,7 @@ mathOperator: (props.value) ? props.value.toString() : "add"
 }
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1.  Locate the render() method. Replace it with the following code, which adds a
+10.  Locate the render() method. Replace it with the following code, which adds a
     drop-down list for the user to select the operator they want to use:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -662,7 +662,7 @@ onChange={this.handleOnSelectedChange}></Dropdown>
 }
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1.  **Save** this file and close it.
+11.  **Save** this file and close it.
 
 ### Task 4 - Test the configuration page
 
@@ -694,7 +694,7 @@ onChange={this.handleOnSelectedChange}></Dropdown>
 import { Provider, Flex, Text, Button, Header } from "@fluentui/react-northstar";
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1.  Replace the previous statement with the following import statement:
+3.  Replace the previous statement with the following import statement:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 import {
@@ -711,7 +711,7 @@ Input
 } from "@fluentui/react-northstar";
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1.  Locate the IConfigMathTabState interface, and replace its contents with the
+4.  Locate the IConfigMathTabState interface, and replace its contents with the
     following:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -722,7 +722,7 @@ operandB: number;
 result: string;
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1.  Add the following method to the ConfigMathTab class that will update the
+5.  Add the following method to the ConfigMathTab class that will update the
     component state to match the currently selected Microsoft Teams client
     theme:
 
@@ -750,7 +750,7 @@ teamsTheme: componentTheme
 }
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1.  Initialize the current theme and state of the component. Locate the line
+6.  Initialize the current theme and state of the component. Locate the line
     this.updateTheme(this.getQueryVariable("theme")); and replace it with the
     following code in the componentWillMount() method:
 
@@ -758,13 +758,13 @@ teamsTheme: componentTheme
 this.updateComponentTheme(this.getQueryVariable("theme"));
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1.  Within the componentWillMount() method, locate the following line:
+7.  Within the componentWillMount() method, locate the following line:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 microsoftTeams.registerOnThemeChangeHandler(this.updateTheme);
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1.  This code registers an event handler to update the component's theme to
+8.  This code registers an event handler to update the component's theme to
     match the theme of the current Microsoft Teams client when this page is
     loaded as a tab. Update this line to call the new handler in the following
     line to register another handler to update the component theme.
@@ -773,7 +773,7 @@ microsoftTeams.registerOnThemeChangeHandler(this.updateTheme);
 microsoftTeams.registerOnThemeChangeHandler(this.updateComponentTheme);
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1.  Locate the following line in the componentWillMount() method:
+9.  Locate the following line in the componentWillMount() method:
     microsoftTeams.getContext(). The function passed into this method sets the
     state of the React component. Replace the this.setState() method with the
     following code. This new code takes the value of the entityId property on
@@ -785,7 +785,7 @@ mathOperator: context.entityId.replace("MathPage", "")
 }));
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1.  Locate the following code in the componetWillMount() method:
+10.  Locate the following code in the componetWillMount() method:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 this.setState({
@@ -793,7 +793,7 @@ entityId: "This is not hosted in Microsoft Teams"
 });
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1.  Replace this code with the following code. This new code will cause the math
+11.  Replace this code with the following code. This new code will cause the math
     operator to add two numbers by default in case this page is loaded outside
     of a Microsoft Teams client.
 
@@ -803,7 +803,7 @@ mathOperator: "add"
 }));
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1.  Add the following event handlers to the ConfigMathTab class. These event
+12.  Add the following event handlers to the ConfigMathTab class. These event
     handlers will update the state with the values from the controls and do the
     calculation of the two numbers by using the operator specified on the
     configuration page.
@@ -842,7 +842,7 @@ result: stringResult
 }
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1.  Locate the render() method in the ConfigMathTab class. Replace the existing
+13.  Locate the render() method in the ConfigMathTab class. Replace the existing
     method implementation with the following code. This new code adds two input
     boxes and a button to the page. When the button is selected, it does the
     math operation selected on the configuration page to the two values and
@@ -881,7 +881,7 @@ onClick={this.handleOperandChange}></Button>
 }
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1.  **Save** this file and close it.
+14.  **Save** this file and close it.
 
 ### Task 6 - Test the channel tab page
 
@@ -1077,7 +1077,7 @@ about the current user, which was retrieved from Microsoft Graph.
 import { Provider, Flex, Text, Button, Header } from "@fluentui/react-northstar";
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1.  Replace the previous statement with the following import statement:
+3.  Replace the previous statement with the following import statement:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 import {
@@ -1094,13 +1094,13 @@ List
 } from "@fluentui/react-northstar";
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1.  Add the following import statement:
+4.  Add the following import statement:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 import { EmailIcon } from "@fluentui/react-icons-northstar";
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1.  Update the state of the component to contain a property for the current
+5.  Update the state of the component to contain a property for the current
     theme. Locate the ILearnAuthTabState interface in the LearnAuthTab.tsx file,
     and add the following member to it:
 
@@ -1108,7 +1108,7 @@ import { EmailIcon } from "@fluentui/react-icons-northstar";
 teamsTheme: ThemePrepared;
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1.  Add the following method to the LearnAuthTab class that updates the
+6.  Add the following method to the LearnAuthTab class that updates the
     component state to the theme that matches the currently selected Microsoft
     Teams client theme:
 
@@ -1136,7 +1136,7 @@ teamsTheme: componentTheme
 }
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1.  Initialize the current theme and state of the component. Locate the line
+7.  Initialize the current theme and state of the component. Locate the line
     this.updateTheme(this.getQueryVariable("theme")); and replace it with the
     following code in the componentWillMount() method:
 
@@ -1144,13 +1144,13 @@ teamsTheme: componentTheme
 this.updateComponentTheme(this.getQueryVariable("theme"));
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1.  Within the componentWillMount() method, locate the following line:
+8.  Within the componentWillMount() method, locate the following line:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 microsoftTeams.registerOnThemeChangeHandler(this.updateTheme);
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1.  This code registers an event handler to update the component's theme to
+9.  This code registers an event handler to update the component's theme to
     match the theme of the current Microsoft Teams client when this page is
     loaded as a tab. Update this line to call the new handler in the following
     line to register another handler to update the component theme:
@@ -1159,7 +1159,7 @@ microsoftTeams.registerOnThemeChangeHandler(this.updateTheme);
 microsoftTeams.registerOnThemeChangeHandler(this.updateComponentTheme);
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1.  Add the following import statements after the existing import statements in
+10.  Add the following import statements after the existing import statements in
     the LearnAuthTab.tsx file. These statements include the Microsoft Graph
     JavaScript SDK and associated TypeScript type declarations into the file:
 
@@ -1168,7 +1168,7 @@ import * as MicrosoftGraphClient from "@microsoft/microsoft-graph-client";
 import * as MicrosoftGraph from "microsoft-graph";
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1.  Locate the ILearnAuthTabState interface, and add the following members to
+11.  Locate the ILearnAuthTabState interface, and add the following members to
     it. These properties are used to store the OAuth access token used to
     authenticate with and the email messages returned from Microsoft Graph.
 
@@ -1177,7 +1177,7 @@ accessToken: string;
 messages: MicrosoftGraph.Message[];
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1.  Add the following code to the top of the LearnAuthTab class. This action
+12.  Add the following code to the top of the LearnAuthTab class. This action
     creates a new class-scoped member of the Microsoft Graph client and
     initializes the state of the component.
 
@@ -1191,7 +1191,7 @@ this.state = state;
 }
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1.  Locate the render() method, and update the return statement to the following
+13.  Locate the render() method, and update the return statement to the following
     code. The render() method displays a button for the user to select to sign
     in and request their emails from Microsoft Graph. It then displays the email
     messages in a list.
@@ -1221,7 +1221,7 @@ content={message.subject} index={i}>
 }
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1.  Add the onclick event handler for the button to the LearnAuthTab class.
+14.  Add the onclick event handler for the button to the LearnAuthTab class.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 private handleGetMyMessagesOnClick = async (event): Promise<void> => {
@@ -1229,7 +1229,7 @@ await this.getMessages();
 }
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1.  Add the following code to the end of componentWillMount() to initialize the
+15.  Add the following code to the end of componentWillMount() to initialize the
     Microsoft Graph client:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1247,7 +1247,7 @@ done(null, this.state.accessToken);
 });
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1.  Next, add the following method to the LearnAuthTab class:
+16.  Next, add the following method to the LearnAuthTab class:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 private async getMessages(promptConsent: boolean = false): Promise<void> {
@@ -1273,7 +1273,7 @@ await this.getMessages(true);
 }
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1.  Add the following code to implement the signin() method in LearnAuthTab
+17.  Add the following code to implement the signin() method in LearnAuthTab
     class:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1286,7 +1286,7 @@ Promise.resolve();
 }
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1.  Add the following method in LearnAuthTab class:
+18.  Add the following method in LearnAuthTab class:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 private async getAccessToken(promptConsent: boolean = false): Promise<string> {
@@ -1306,9 +1306,9 @@ reject(reason);
 }
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1.  **Save** this file and close it.s
+19.  **Save** this file and close it.s
 
-2.  Open the folder **C:\\Teams_Projects\\auth-tab\\src\\app\\web** and create a
+20.  Open the folder **C:\\Teams_Projects\\auth-tab\\src\\app\\web** and create a
     new file **auth-start.html**. Add the following code to it. This file uses
     the Microsoft Teams JavaScript SDK and Azure Active Directory Authentication
     Library JavaScript (ADAL.js) libraries to configure ADAL for the Azure AD
@@ -1369,12 +1369,12 @@ return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' ')
 </html>
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1.  Replace the string {{REPLACE_AZUREAD_APP_ID}} with the ID of the Azure AD
+21.  Replace the string {{REPLACE_AZUREAD_APP_ID}} with the ID of the Microsoft
     application you created in Task 1 of this exercise.
 
-2.  **Save** this file and close it.
+22.  **Save** this file and close it.
 
-3.  Create another new file named **auth-end.html**. Add the following code to
+23.  Create another new file named **auth-end.html**. Add the following code to
     it. Like the auth-start.html file, this file uses the Microsoft Teams
     JavaScript SDK and ADAL.js libraries to configure ADAL for the Azure AD
     application created previously in this exercise. It parses the results
@@ -1429,10 +1429,10 @@ microsoftTeams.authentication.notifyFailure(authContext.getLoginError());
 </html>
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-1.  Replace the string {{REPLACE_AZUREAD_APP_ID}} with the ID of the Azure AD
+24.  Replace the string {{REPLACE_AZUREAD_APP_ID}} with the ID of the Microsoft
     application you created in Task 1 of this exercise.
 
-2.  **Save** this file and close it.
+25.  **Save** this file and close it.
 
 ### Task 4 - Install and test the Microsoft Teams app
 
