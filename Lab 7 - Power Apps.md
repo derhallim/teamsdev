@@ -158,13 +158,13 @@ The visual editor should resemble the image below.
     automatically bind to the table, displaying the fields in the table and the
     record you added. The screen should resemble the image below.
 
-    ![](media/4284e665ea9396fcbe77c2f733bffe77.png)
+   ![](media/4284e665ea9396fcbe77c2f733bffe77.png)
 
 43.  Select **Add data** on the left side of the screen.
 
 44.  Select **Create new table**.
 
-    ![](media/af8e24c43c31a5e0a575ecd28d07d70d.png)
+   ![](media/af8e24c43c31a5e0a575ecd28d07d70d.png)
 
 45.  When prompted for the name of the table, enter **Feed Items** and click
     **Create**.
@@ -287,7 +287,7 @@ The visual editor should resemble the image below.
 
     Note - Don’t enter any value in the **Value** field.
 
-    ![](media/d430470c866bf61e10e4249030ad860c.png)
+   ![](media/d430470c866bf61e10e4249030ad860c.png)
 
 12.  Select **New Step**.
 
@@ -436,7 +436,7 @@ The visual editor should resemble the image below.
 52.  Select the header of the action to show the title of **Evaluate links to
     determine if this is YouTube or a Vlog with a video**.
 
-    ![](media/9ac2fdead574a2eaaaae4d6b042d137c.png)
+   ![](media/9ac2fdead574a2eaaaae4d6b042d137c.png)
 
 53.  Inside *Loop through each of the items in the feed since last retrieved*
     action, select **Add an action**.
@@ -575,7 +575,7 @@ The visual editor should resemble the image below.
 105. Select the refresh button in **28-day run history** to show the details of
     the flow run.
 
-    ![](media/3ac5340c73ce1c63ea682a62f3d32283.png)
+   ![](media/3ac5340c73ce1c63ea682a62f3d32283.png)
 
 106. If the flow doesn't show as succeeded, select the flow run and it will
     display the failed action with any associated error message.
@@ -680,7 +680,7 @@ The visual editor should resemble the image below.
     underneath the Video Gallery with names starting with Subtitle, Title, and
     Image.
 
-    ![](media/6648ce9d29a580b8c02201de11250021.png)
+   ![](media/6648ce9d29a580b8c02201de11250021.png)
 
 25.  Select the control that starts with **Subtitle**.
 
@@ -961,15 +961,15 @@ check box, the addition of the app won't be announced.
         and types of connections asking for your permissions may vary depending
         on the app you install.
 
-        ![](media/583e6073ddfb8385c5d9dc00dcb57ded.png)
+    ![](media/583e6073ddfb8385c5d9dc00dcb57ded.png)
 
 3.  Select **Allow**, so the app can use connections.
 
 4.  Select the channel (in this example, the channel is populated
         automatically), and then select **Let's go**.
 
-        ![](media/6334c952c9d05726976d6abbf5d459b0.png)
+    ![](media/6334c952c9d05726976d6abbf5d459b0.png)
 
 5.  The **Employee ideas** app is now open and ready for your use.
 
-        ![](media/25f7d1da360d315f1d09571d12a95e51.png)
+    ![](media/25f7d1da360d315f1d09571d12a95e51.png)
