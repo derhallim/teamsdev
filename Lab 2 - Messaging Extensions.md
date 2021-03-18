@@ -26,20 +26,22 @@
 3.  In the left navigation pane, click on **Teams apps** and then **Setup
     policies**.
 
-4.  Click **+Add** and turn ON the **Upload Custom Apps** option.
+4.  Click **+Add** and provide a name for the policy, such as "Admin Policy" and make sure to turn on the **Upload Custom Apps** option. Click Save. 
 
-5.  Open another browse tab and navigate to the following URL:
+5. On the "App setup policies" page, select the "Admin Policy" (or the name you provided for the policy), click manage users, and add your admin user name then save.
+
+6.  Open another browse tab and navigate to the following URL:
 
     <https://admin.microsoft.com>
 
-6.  Sign in with your lab admin credentials, if prompted to sign in.
+7.  Sign in with your lab admin credentials, if prompted to sign in.
 
-7.  In the left navigation pane, expand **Users** and then select **Active
+8.  In the left navigation pane, expand **Users** and then select **Active
     Users**.
 
-8.  Click **Add a user**.
+9.  Click **Add a user**.
 
-9.  In **Add a user** panel,
+10.  In **Add a user** panel,
 
     **First Name** – Test
 
@@ -49,17 +51,17 @@
 
     **Username –** testuser
 
-10. **Check** the checkbox for **Send password in email upon completion**.
+11. **Check** the checkbox for **Send password in email upon completion**.
 
-11. Click **Next**.
+12. Click **Next**.
 
-12. Select the checkbox for **Office 365 E3** and click **Next**.
+13. Select the checkbox for **Office 365 E5** and click **Next**.
 
-13. Click **Next**.
+14. Click **Next**.
 
-14. Click **Finish adding**.
+15. Click **Finish adding**.
 
-15. Click **Close**.
+16. Click **Close**.
 
 ## Exercise 1- Create action command messaging extensions
 
